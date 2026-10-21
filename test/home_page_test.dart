@@ -14,7 +14,7 @@ void main() {
     await tester.runAsync(
       () => c.init(supportDir: Directory.systemTemp.createTempSync()),
     );
-    await tester.pumpWidget(TranscritorApp(controller: c));
+    await tester.pumpWidget(FalaQueEuTranscrevoApp(controller: c));
     await tester.pump();
 
     expect(
@@ -43,7 +43,7 @@ void main() {
       )
       ..phase = Phase.done
       ..status = 'Transcrição concluída.';
-    await tester.pumpWidget(TranscritorApp(controller: c));
+    await tester.pumpWidget(FalaQueEuTranscrevoApp(controller: c));
     await tester.pump();
 
     expect(find.text('aula.mp4'), findsOneWidget);

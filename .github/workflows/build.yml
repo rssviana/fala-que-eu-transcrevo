@@ -98,22 +98,22 @@ jobs:
           mkdir -p dist
           case "${{ matrix.platform }}" in
             macos)
-              APP=build/macos/Build/Products/Release/Transcritor.app
+              APP="build/macos/Build/Products/Release/Fala que eu transcrevo!.app"
               mkdir -p "$APP/Contents/Resources/bin"
               cp bin/* "$APP/Contents/Resources/bin/"
               codesign --force --deep -s - "$APP"
-              ditto -c -k --keepParent "$APP" dist/Transcritor-macos-arm64.zip ;;
+              ditto -c -k --keepParent "$APP" dist/FalaQueEuTranscrevo-macos-arm64.zip ;;
             linux)
               B=build/linux/x64/release/bundle
               mkdir -p "$B/bin" && cp bin/* "$B/bin/"
-              tar -czf dist/Transcritor-linux-x64.tar.gz -C "$B" . ;;
+              tar -czf dist/FalaQueEuTranscrevo-linux-x64.tar.gz -C "$B" . ;;
             windows)
               B=build/windows/x64/runner/Release
               mkdir -p "$B/bin" && cp bin/* "$B/bin/"
-              7z a dist/Transcritor-windows-x64.zip "./$B/*" ;;
+              7z a dist/FalaQueEuTranscrevo-windows-x64.zip "./$B/*" ;;
           esac
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Transcritor-${{ matrix.platform }}
+          name: FalaQueEuTranscrevo-${{ matrix.platform }}
           path: dist/*

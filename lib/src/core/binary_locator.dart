@@ -36,7 +36,7 @@ class BinaryLocator {
 
   /// Pasta onde os binários vão empacotados junto do app.
   ///
-  /// - macOS: `Transcritor.app/Contents/Resources/bin`
+  /// - macOS: `Fala que eu transcrevo!.app/Contents/Resources/bin`
   /// - Windows/Linux: `bin/` ao lado do executável.
   String get bundledBinDir {
     final exeDir = _p.dirname(executablePath);

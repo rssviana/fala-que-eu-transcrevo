@@ -5,7 +5,8 @@ void main() {
   BinaryLocator mac(Set<String> files, {String path = '/usr/bin:/bin'}) =>
       BinaryLocator(
         os: 'macos',
-        executablePath: '/Apps/Transcritor.app/Contents/MacOS/transcritor',
+        executablePath:
+            '/Apps/Fala que eu transcrevo!.app/Contents/MacOS/transcritor',
         environment: {'PATH': path},
         isFile: files.contains,
       );
@@ -13,17 +14,20 @@ void main() {
   test('macOS: pasta empacotada fica em Contents/Resources/bin', () {
     expect(
       mac({}).bundledBinDir,
-      '/Apps/Transcritor.app/Contents/Resources/bin',
+      '/Apps/Fala que eu transcrevo!.app/Contents/Resources/bin',
     );
   });
 
   test('prefere o binário empacotado ao do PATH', () {
     final l = mac({
-      '/Apps/Transcritor.app/Contents/Resources/bin/ffmpeg',
+      '/Apps/Fala que eu transcrevo!.app/Contents/Resources/bin/ffmpeg',
       '/usr/bin/ffmpeg',
     });
     final found = l.find(Tool.ffmpeg)!;
-    expect(found, '/Apps/Transcritor.app/Contents/Resources/bin/ffmpeg');
+    expect(
+      found,
+      '/Apps/Fala que eu transcrevo!.app/Contents/Resources/bin/ffmpeg',
+    );
     expect(l.isBundled(found), isTrue);
   });
 

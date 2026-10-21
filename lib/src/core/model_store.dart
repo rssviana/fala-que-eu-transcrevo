@@ -39,7 +39,7 @@ class ModelStore {
     final part = File('$target.part');
     _cancelled = false;
     final client = _client = HttpClient()
-      ..userAgent = 'Transcritor (whisper.cpp model downloader)';
+      ..userAgent = 'FalaQueEuTranscrevo (whisper.cpp model downloader)';
     IOSink? sink;
     try {
       final request = await client.getUrl(model.downloadUri);

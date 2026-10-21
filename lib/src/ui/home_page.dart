@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Transcritor')),
+      appBar: AppBar(title: const Text('Fala que eu transcrevo!')),
       body: ListenableBuilder(
         listenable: c,
         builder: (context, _) {

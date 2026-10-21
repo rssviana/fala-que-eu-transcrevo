@@ -1,8 +1,11 @@
-# Transcritor
+# Fala que eu transcrevo!
 
 App desktop (macOS, Windows e Linux) que transcreve vídeos **localmente e offline**
 usando o [Whisper](https://github.com/openai/whisper) via
 [whisper.cpp](https://github.com/ggml-org/whisper.cpp). Nada sai do computador.
+
+Nomes técnicos: pasta e pacote Dart `transcritor`, bundle id `dev.rssviana.transcritor`,
+executável `transcritor` no Windows e no Linux.
 
 ## Como funciona
 
@@ -64,7 +67,7 @@ lib/
 Em ordem, parando no primeiro encontrado (`lib/src/core/binary_locator.dart`):
 
 1. **Pasta empacotada com o app**
-   - macOS: `Transcritor.app/Contents/Resources/bin/`
+   - macOS: `Fala que eu transcrevo!.app/Contents/Resources/bin/`
    - Windows e Linux: `bin/` ao lado do executável
 2. `PATH` do sistema
 3. Pastas comuns: `/opt/homebrew/bin`, `/usr/local/bin` (macOS); `/usr/local/bin`, `/usr/bin`,
@@ -107,7 +110,7 @@ No macOS o Metal (GPU) já vem ligado e os shaders ficam embutidos no binário.
 
 ```bash
 # macOS (depois de flutter build macos --release)
-APP=build/macos/Build/Products/Release/Transcritor.app
+APP="build/macos/Build/Products/Release/Fala que eu transcrevo!.app"
 mkdir -p "$APP/Contents/Resources/bin"
 cp ffmpeg whisper-cli "$APP/Contents/Resources/bin/"
 codesign --force --deep -s - "$APP"   # ad-hoc; para distribuir, use Developer ID + notarização

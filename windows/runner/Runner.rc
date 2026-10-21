@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "dev.rssviana" "\0"
-            VALUE "FileDescription", "Transcritor" "\0"
+            VALUE "FileDescription", "Fala que eu transcrevo!" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "transcritor" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 dev.rssviana. All rights reserved." "\0"
             VALUE "OriginalFilename", "transcritor.exe" "\0"
-            VALUE "ProductName", "Transcritor" "\0"
+            VALUE "ProductName", "Fala que eu transcrevo!" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
