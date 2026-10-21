@@ -78,9 +78,9 @@ void main() {
     expect(c.modelId, 'medium');
 
     c.video = VideoFile('/v/aula.mp4', 1024);
-    c.setModel('large-v3');
+    c.setModel('large-v3-turbo');
     await tester.pump();
-    expect(find.text('O modelo será baixado antes (2,9 GB)'), findsOneWidget);
+    expect(find.text('O modelo será baixado antes (1,5 GB)'), findsOneWidget);
     expect(find.text('aula.mp4'), findsOneWidget);
     expect(find.text('Trocar vídeo'), findsOneWidget);
   });

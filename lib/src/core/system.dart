@@ -104,3 +104,17 @@ String defaultInstallTab(String os) =>
   }
   return null;
 }
+
+/// Executável e argumentos para mostrar [path] no gerenciador de arquivos do
+/// sistema, com o arquivo selecionado quando o SO permite.
+(String, List<String>)? revealCommand(String os, String path) => switch (os) {
+  'macos' => ('open', ['-R', path]),
+  'windows' => ('explorer', ['/select,', path]),
+  'linux' => ('xdg-open', [_dirname(path)]),
+  _ => null,
+};
+
+String _dirname(String path) {
+  final i = path.lastIndexOf('/');
+  return i <= 0 ? '/' : path.substring(0, i);
+}

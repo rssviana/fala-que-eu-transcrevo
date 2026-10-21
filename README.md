@@ -13,14 +13,17 @@ A interface segue o handoff de design em `design/HANDOFF.md` (referência visual
 `design/referencia.html`). São 4 telas:
 
 1. **Início** — arraste (ou escolha, `Cmd/Ctrl+O`) um vídeo local, escolha o idioma (padrão
-   português do Brasil, ou "Detectar automaticamente") e a qualidade (modelo Tiny a Large).
+   português do Brasil, ou "Detectar automaticamente") e a qualidade (modelo Tiny a Large
+   Turbo). Abaixo dos cartões aparece o que o modelo escolhido significa na prática.
 2. **Primeira execução** — aparece se faltar ffmpeg ou whisper-cli, com o comando de instalação
    do seu sistema e o botão "Já instalei, verificar de novo".
 3. **Transcrevendo** — etapas (áudio separado → modelo pronto/baixando → transcrevendo → pronto),
    porcentagem, tempo restante estimado e prévia ao vivo do texto. Ao terminar, o sistema mostra
    uma notificação.
 4. **Resultado** — clique num trecho para editar, clique no horário para copiá-lo, busque no
-   texto (`Cmd/Ctrl+F`), copie tudo ou salve como:
+   texto (`Cmd/Ctrl+F`), copie tudo ou salve. Cada botão abre a janela "Salvar" do sistema,
+   começando na pasta do vídeo, para escolher pasta e nome; depois dá para "Mostrar na pasta".
+   Formatos:
    - **TXT** — texto corrido, um trecho por linha
    - **SRT** e **VTT** — legendas com tempos
    - **MD** — Markdown com título, idioma, modelo, data e parágrafos com tempo de início
@@ -40,7 +43,7 @@ para a pasta de suporte do app (no macOS,
 | Base | `ggml-base.bin` | ~142 MB | 4 | 2 |
 | Small (padrão, "Ideal") | `ggml-small.bin` | ~466 MB | 3 | 3 |
 | Medium | `ggml-medium.bin` | ~1,5 GB | 2 | 4 |
-| Large | `ggml-large-v3.bin` | ~2,9 GB | 1 | 5 |
+| Large Turbo | `ggml-large-v3-turbo.bin` | ~1,5 GB | 2 | 5 |
 
 ## Desenvolvimento
 
@@ -186,7 +189,6 @@ plataforma. Roda em push de tag `v*` ou manualmente (workflow_dispatch).
 - Sem assinatura/notarização no macOS: na primeira abertura, use botão direito → Abrir.
 - Sem instaladores (dmg/msi/AppImage) ainda: os artefatos são a pasta do app compactada.
 - Arquivos sem trilha de áudio falham na etapa do ffmpeg (a mensagem de erro mostra o motivo).
-- Telas de Histórico e Configurações ainda não foram desenhadas: os botões abrem um aviso "Em breve".
 - A notificação de fim usa `osascript` (macOS), `notify-send` (Linux) e um balão do PowerShell
   (Windows). No macOS ela aparece como vinda do "Script Editor".
 - Linux ainda sem ícone de janela.

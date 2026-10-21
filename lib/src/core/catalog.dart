@@ -8,6 +8,7 @@ class WhisperModel {
     required this.approxBytes,
     required this.speed,
     required this.accuracy,
+    required this.description,
     this.recommended = false,
   });
 
@@ -19,6 +20,9 @@ class WhisperModel {
   /// Medidores de 0 a 5 mostrados no cartão do modelo.
   final int speed;
   final int accuracy;
+
+  /// O que o modelo significa na prática, mostrado abaixo dos cartões.
+  final String description;
 
   /// Selo "Ideal".
   final bool recommended;
@@ -41,6 +45,9 @@ const whisperModels = <WhisperModel>[
     approxBytes: 75 * _mb,
     speed: 5,
     accuracy: 1,
+    description:
+        'O mais rápido e leve. Bom para testar ou para áudio bem limpo, '
+        'mas erra mais palavras.',
   ),
   WhisperModel(
     id: 'base',
@@ -48,6 +55,9 @@ const whisperModels = <WhisperModel>[
     approxBytes: 142 * _mb,
     speed: 4,
     accuracy: 2,
+    description:
+        'Rápido e leve. Funciona bem com uma pessoa falando claro, '
+        'sem barulho de fundo.',
   ),
   WhisperModel(
     id: 'small',
@@ -56,6 +66,9 @@ const whisperModels = <WhisperModel>[
     speed: 3,
     accuracy: 3,
     recommended: true,
+    description:
+        'Equilíbrio entre velocidade e precisão. Recomendado para a maioria '
+        'dos vídeos, como aulas, reuniões e entrevistas.',
   ),
   WhisperModel(
     id: 'medium',
@@ -63,13 +76,19 @@ const whisperModels = <WhisperModel>[
     approxBytes: 1533 * _mb,
     speed: 2,
     accuracy: 4,
+    description:
+        'Mais preciso com sotaques, ruído e termos técnicos, '
+        'mas bem mais lento que o Small.',
   ),
   WhisperModel(
-    id: 'large-v3',
-    label: 'Large',
-    approxBytes: 2970 * _mb,
-    speed: 1,
+    id: 'large-v3-turbo',
+    label: 'Large Turbo',
+    approxBytes: 1624555275,
+    speed: 2,
     accuracy: 5,
+    description:
+        'A melhor precisão. Versão otimizada do maior modelo do Whisper: '
+        'mais rápida que o Large original, mas pede mais memória.',
   ),
 ];
 

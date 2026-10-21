@@ -17,37 +17,8 @@ import '../widgets/file_card.dart';
 class HomeHeaderActions extends StatelessWidget {
   const HomeHeaderActions({super.key});
 
-  void _soon(BuildContext context, String title) => showAppDialog<void>(
-    context,
-    title: title,
-    message: 'Esta tela ainda está sendo desenhada. Em breve.',
-    actions: (ctx) => [
-      OutlineButton(
-        label: 'Fechar',
-        height: 44,
-        onTap: () => Navigator.of(ctx).pop(),
-      ),
-    ],
-  );
-
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    spacing: 10,
-    children: [
-      const StatusPill(ok: true),
-      HeaderIconButton(
-        icon: AppIcons.history,
-        label: 'Histórico',
-        onTap: () => _soon(context, 'Histórico'),
-      ),
-      HeaderIconButton(
-        icon: AppIcons.settings,
-        label: 'Configurações',
-        onTap: () => _soon(context, 'Configurações'),
-      ),
-    ],
-  );
+  Widget build(BuildContext context) => const StatusPill(ok: true);
 }
 
 class HomeScreen extends StatefulWidget {
@@ -494,7 +465,39 @@ class _ModelGrid extends StatelessWidget {
             );
           },
         ),
+        const SizedBox(height: 12),
+        _ModelDescription(model: controller.model),
       ],
+    );
+  }
+}
+
+/// O que o modelo escolhido significa na prática.
+class _ModelDescription extends StatelessWidget {
+  const _ModelDescription({required this.model});
+  final WhisperModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      liveRegion: true,
+      child: Text.rich(
+        TextSpan(
+          style: AppText.hintSmall,
+          children: [
+            TextSpan(
+              text: '${model.label}: ',
+              style: AppText.ui(
+                12.5,
+                600,
+                color: AppColors.textStrongMuted,
+                height: 1.5,
+              ),
+            ),
+            TextSpan(text: model.description),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -522,6 +525,7 @@ class _ModelCard extends StatelessWidget {
       onTap: onTap,
       radius: 14,
       selected: selected,
+      tooltip: model.description,
       semanticLabel:
           '${model.label}${model.recommended ? ', ideal' : ''}. '
           'Rapidez ${model.speed} de 5, precisão ${model.accuracy} de 5. $size',

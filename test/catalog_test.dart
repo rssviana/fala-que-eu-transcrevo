@@ -28,18 +28,20 @@ void main() {
       'Base',
       'Small',
       'Medium',
-      'Large',
+      'Large Turbo',
     ]);
     expect(whisperModels.where((m) => m.recommended).single.id, 'small');
-    expect(whisperModels.map((m) => m.speed), [5, 4, 3, 2, 1]);
+    expect(whisperModels.map((m) => m.speed), [5, 4, 3, 2, 2]);
     expect(whisperModels.map((m) => m.accuracy), [1, 2, 3, 4, 5]);
     expect(whisperModels.map((m) => m.sizeLabel), [
       '75 MB',
       '142 MB',
       '466 MB',
       '1,5 GB',
-      '2,9 GB',
+      '1,5 GB',
     ]);
+    expect(modelById('large-v3-turbo').fileName, 'ggml-large-v3-turbo.bin');
+    expect(whisperModels.every((m) => m.description.isNotEmpty), isTrue);
   });
 
   test('idiomas começam na ordem do design', () {

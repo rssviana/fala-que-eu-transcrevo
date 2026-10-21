@@ -66,4 +66,13 @@ void main() {
     expect(win.$2.last, contains("'it''s'"));
     expect(notificationCommand('android', 'T', 'B'), isNull);
   });
+
+  test('mostrar o arquivo salvo na pasta', () {
+    final mac = revealCommand('macos', '/a/b.txt')!;
+    expect(mac.$1, 'open');
+    expect(mac.$2, ['-R', '/a/b.txt']);
+    expect(revealCommand('linux', '/a/b.txt')!.$2, ['/a']);
+    expect(revealCommand('windows', r'C:\a\b.txt')!.$1, 'explorer');
+    expect(revealCommand('android', '/a'), isNull);
+  });
 }

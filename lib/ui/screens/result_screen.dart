@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import '../../src/core/catalog.dart';
 import '../../src/core/export.dart';
 import '../../src/core/search.dart';
+import '../../src/core/system.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text.dart';
 import '../controller.dart';
@@ -57,29 +58,51 @@ class _ResultScreenState extends State<ResultScreen> with CopyFeedback {
     super.dispose();
   }
 
-  void _snack(String msg) => ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: AppColors.surfaceRaised,
-      behavior: SnackBarBehavior.floating,
-      width: 420,
-      content: Text(msg, style: AppText.ui(14, 500)),
-    ),
-  );
+  void _snack(String msg, {SnackBarAction? action}) =>
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.surfaceRaised,
+          behavior: SnackBarBehavior.floating,
+          width: 460,
+          content: Text(msg, style: AppText.ui(14, 500)),
+          action: action,
+        ),
+      );
 
+  /// Abre a janela nativa "Salvar" do sistema (começando na pasta do vídeo)
+  /// para a pessoa escolher a pasta e o nome do arquivo.
   Future<void> _save(String ext) async {
-    final location = await getSaveLocation(
-      suggestedName: '${c.baseName}.$ext',
-      initialDirectory: c.videoDir,
-      acceptedTypeGroups: [
-        XTypeGroup(label: ext.toUpperCase(), extensions: [ext]),
-      ],
-    );
-    if (location == null) return;
+    final FileSaveLocation? location;
+    try {
+      location = await getSaveLocation(
+        suggestedName: '${c.baseName}.$ext',
+        initialDirectory: c.videoDir,
+        confirmButtonText: 'Salvar',
+        acceptedTypeGroups: [
+          XTypeGroup(label: ext.toUpperCase(), extensions: [ext]),
+        ],
+      );
+    } catch (e) {
+      _snack('Não foi possível abrir a janela de salvar: $e');
+      return;
+    }
+    if (location == null) return; // cancelou
     var path = location.path;
     if (p.extension(path).isEmpty) path = '$path.$ext';
     try {
       await File(path).writeAsBytes(await c.exportBytes(ext));
-      _snack('Salvo em ${p.basename(path)}');
+      if (!mounted) return;
+      final reveal = revealCommand(c.currentOs, path);
+      _snack(
+        'Salvo em ${p.basename(p.dirname(path))}/${p.basename(path)}',
+        action: reveal == null
+            ? null
+            : SnackBarAction(
+                label: 'Mostrar na pasta',
+                textColor: context.palette.accentText,
+                onPressed: () => Process.run(reveal.$1, reveal.$2),
+              ),
+      );
     } catch (e) {
       _snack('Não foi possível salvar: $e');
     }
