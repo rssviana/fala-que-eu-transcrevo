@@ -1,13 +1,20 @@
 name: Build
 
+# - push na main / pull request: testes
+# - workflow_dispatch: testes + instaladores (artefatos do run)
+# - tag v*: testes + instaladores + Release no GitHub com nomes fixos, para os
+#   botões de download do README (releases/latest/download/...) funcionarem
 on:
   push:
+    branches: [main]
     tags: ['v*']
   pull_request:
   workflow_dispatch:
 
 env:
   FLUTTER_VERSION: '3.38.10'
+  WHISPER_CPP_VERSION: 'v1.9.5'
+  FFMPEG_VERSION: '7.1.1'
 
 jobs:
   test:
@@ -25,7 +32,7 @@ jobs:
 
   build:
     needs: test
-    if: github.event_name != 'pull_request'
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
     strategy:
       fail-fast: false
       matrix:
@@ -53,15 +60,15 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libfuse2
 
       # whisper-cli estático (sem .dll/.so/.dylib para carregar junto).
       - name: Compilar whisper-cli
         run: |
-          git clone --depth 1 https://github.com/ggml-org/whisper.cpp
+          git clone --depth 1 --branch "$WHISPER_CPP_VERSION" https://github.com/ggml-org/whisper.cpp
           cmake -S whisper.cpp -B whisper.cpp/build \
             -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_TESTS=OFF \
-            -DGGML_NATIVE=OFF -DCMAKE_BUILD_TYPE=Release
+            -DGGML_NATIVE=OFF -DGGML_OPENMP=OFF -DCMAKE_BUILD_TYPE=Release
           cmake --build whisper.cpp/build --config Release --target whisper-cli -j 4
           mkdir -p bin
           if [ "${{ matrix.platform }}" = windows ]; then
@@ -70,22 +77,43 @@ jobs:
             cp whisper.cpp/build/bin/whisper-cli bin/
           fi
 
+      # No macOS não há build estático confiável para baixar: compila do
+      # código-fonte oficial, sem bibliotecas externas (cache por versão).
+      - name: Cache do ffmpeg (macOS)
+        if: matrix.platform == 'macos'
+        id: ffmpeg-cache
+        uses: actions/cache@v4
+        with:
+          path: ffmpeg-build/ffmpeg
+          key: ffmpeg-${{ env.FFMPEG_VERSION }}-macos-arm64-v1
+
+      - name: Compilar ffmpeg (macOS)
+        if: matrix.platform == 'macos' && steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ffmpeg-build && cd ffmpeg-build
+          curl -sSfL -o src.tar.xz "https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.xz"
+          tar -xJf src.tar.xz
+          cd "ffmpeg-$FFMPEG_VERSION"
+          ./configure --prefix="$PWD/out" --enable-static --disable-shared \
+            --disable-doc --disable-ffplay --disable-ffprobe --disable-network \
+            --disable-autodetect --enable-zlib
+          make -j"$(sysctl -n hw.ncpu)"
+          cp ffmpeg ../ffmpeg
+
       - name: Baixar ffmpeg estático
         run: |
           mkdir -p dl bin
           case "${{ matrix.platform }}" in
             windows)
-              curl -sSL -o dl/ff.zip https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip
+              curl -sSfL -o dl/ff.zip https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip
               unzip -q dl/ff.zip -d dl
               cp dl/ffmpeg-*/bin/ffmpeg.exe bin/ ;;
             linux)
-              curl -sSL -o dl/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+              curl -sSfL -o dl/ff.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
               tar -xJf dl/ff.tar.xz -C dl
               cp dl/ffmpeg-*/bin/ffmpeg bin/ ;;
             macos)
-              curl -sSL -o dl/ff.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/release/ffmpeg.zip
-              unzip -q dl/ff.zip -d dl
-              cp dl/ffmpeg bin/ ;;
+              cp ffmpeg-build/ffmpeg bin/ ;;
           esac
           chmod +x bin/* || true
           ls -la bin
@@ -93,27 +121,67 @@ jobs:
       - name: Build Flutter
         run: flutter build ${{ matrix.platform }} --release
 
-      - name: Empacotar
+      - name: Versão
+        id: version
         run: |
-          mkdir -p dist
-          case "${{ matrix.platform }}" in
-            macos)
-              APP="build/macos/Build/Products/Release/Fala que eu transcrevo!.app"
-              mkdir -p "$APP/Contents/Resources/bin"
-              cp bin/* "$APP/Contents/Resources/bin/"
-              codesign --force --deep -s - "$APP"
-              ditto -c -k --keepParent "$APP" dist/FalaQueEuTranscrevo-macos-arm64.zip ;;
-            linux)
-              B=build/linux/x64/release/bundle
-              mkdir -p "$B/bin" && cp bin/* "$B/bin/"
-              tar -czf dist/FalaQueEuTranscrevo-linux-x64.tar.gz -C "$B" . ;;
-            windows)
-              B=build/windows/x64/runner/Release
-              mkdir -p "$B/bin" && cp bin/* "$B/bin/"
-              7z a dist/FalaQueEuTranscrevo-windows-x64.zip "./$B/*" ;;
-          esac
+          echo "value=$(grep '^version:' pubspec.yaml | sed -E 's/version: ([0-9.]+).*/\1/')" >> "$GITHUB_OUTPUT"
+
+      - name: Instalador macOS (.dmg)
+        if: matrix.platform == 'macos'
+        run: |
+          APP="build/macos/Build/Products/Release/Fala que eu transcrevo!.app"
+          mkdir -p "$APP/Contents/Resources/bin"
+          cp bin/* "$APP/Contents/Resources/bin/"
+          codesign --force --deep -s - "$APP"
+          mkdir -p dmg dist
+          cp -R "$APP" dmg/
+          ln -s /Applications dmg/Applications
+          hdiutil create -volname "Fala que eu transcrevo!" -srcfolder dmg \
+            -ov -format UDZO dist/FalaQueEuTranscrevo-macos.dmg
+
+      - name: Instalador Windows (.exe)
+        if: matrix.platform == 'windows'
+        run: |
+          B=build/windows/x64/runner/Release
+          mkdir -p "$B/bin" dist && cp bin/* "$B/bin/"
+          ISCC="/c/Program Files (x86)/Inno Setup 6/ISCC.exe"
+          if [ ! -f "$ISCC" ]; then choco install innosetup -y --no-progress; fi
+          "$ISCC" "//DAppVersion=${{ steps.version.outputs.value }}" \
+            "//DSourceDir=$(cygpath -w "$PWD/$B")" packaging/windows/installer.iss
+
+      - name: Instalador Linux (.AppImage)
+        if: matrix.platform == 'linux'
+        run: |
+          B=build/linux/x64/release/bundle
+          mkdir -p "$B/bin" dist && cp bin/* "$B/bin/"
+          APPDIR=FalaQueEuTranscrevo.AppDir
+          cp -R "$B" "$APPDIR"
+          cp packaging/linux/AppRun "$APPDIR/AppRun"
+          cp packaging/linux/fala-que-eu-transcrevo.desktop "$APPDIR/"
+          cp linux/assets/app_icon.png "$APPDIR/fala-que-eu-transcrevo.png"
+          curl -sSfL -o appimagetool https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool
+          ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 ./appimagetool "$APPDIR" dist/FalaQueEuTranscrevo-linux-x86_64.AppImage
 
       - uses: actions/upload-artifact@v4
         with:
           name: FalaQueEuTranscrevo-${{ matrix.platform }}
           path: dist/*
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -la dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Fala que eu transcrevo! ${{ github.ref_name }}
+          generate_release_notes: true
+          files: dist/*

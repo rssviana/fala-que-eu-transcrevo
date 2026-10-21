@@ -1,0 +1,4 @@
+#!/bin/sh
+# Ponto de entrada do AppImage: o bundle do Flutter fica na raiz do AppDir.
+HERE="$(dirname "$(readlink -f "$0")")"
+exec "$HERE/transcritor" "$@"

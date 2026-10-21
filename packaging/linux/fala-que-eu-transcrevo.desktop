@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fala que eu transcrevo!
+Comment=Vídeo vira texto, sem sair do seu computador
+Exec=transcritor
+Icon=fala-que-eu-transcrevo
+Categories=AudioVideo;Utility;
+Terminal=false

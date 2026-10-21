@@ -1,8 +1,41 @@
-# Fala que eu transcrevo!
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="design/logo/lockup/lockup-transparente-escuro@2x.png">
+    <img alt="Fala que eu transcrevo!" src="design/logo/lockup/lockup-transparente-claro@2x.png" width="420">
+  </picture>
+</p>
 
-App desktop (macOS, Windows e Linux) que transcreve vídeos **localmente e offline**
-usando o [Whisper](https://github.com/openai/whisper) via
-[whisper.cpp](https://github.com/ggml-org/whisper.cpp). Nada sai do computador.
+<p align="center">
+  Vídeo vira texto, sem sair do seu computador.<br>
+  Transcrição <b>local e offline</b> com o <a href="https://github.com/openai/whisper">Whisper</a>
+  (via <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a>). Nada é enviado para a internet.
+</p>
+
+<p align="center">
+  <a href="https://github.com/rssviana/fala-que-eu-transcrevo/releases/latest/download/FalaQueEuTranscrevo-windows-setup.exe"><img alt="Baixar para Windows (.exe)" src="https://img.shields.io/badge/Windows-Baixar%20.exe-DB8A74?style=for-the-badge&logo=windows&logoColor=white&labelColor=2F243A"></a>
+  <a href="https://github.com/rssviana/fala-que-eu-transcrevo/releases/latest/download/FalaQueEuTranscrevo-macos.dmg"><img alt="Baixar para macOS (.dmg)" src="https://img.shields.io/badge/macOS-Baixar%20.dmg-DB8A74?style=for-the-badge&logo=apple&logoColor=white&labelColor=2F243A"></a>
+  <a href="https://github.com/rssviana/fala-que-eu-transcrevo/releases/latest/download/FalaQueEuTranscrevo-linux-x86_64.AppImage"><img alt="Baixar para Linux (.AppImage)" src="https://img.shields.io/badge/Linux-Baixar%20.AppImage-DB8A74?style=for-the-badge&logo=linux&logoColor=white&labelColor=2F243A"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/rssviana/fala-que-eu-transcrevo/releases/latest">Todas as versões</a> ·
+  <a href="https://github.com/rssviana/fala-que-eu-transcrevo/actions/workflows/build.yml"><img alt="Build" src="https://github.com/rssviana/fala-que-eu-transcrevo/actions/workflows/build.yml/badge.svg"></a>
+</p>
+
+## Instalação
+
+O ffmpeg e o whisper-cli já vão dentro do instalador. Os modelos do Whisper são baixados pelo
+próprio app no primeiro uso (de 75 MB a 1,5 GB, conforme a qualidade escolhida).
+
+Os instaladores ainda **não são assinados**, então o sistema avisa na primeira abertura:
+
+- **macOS** (Apple Silicon): abra o `.dmg` e arraste o app para Aplicativos. Na primeira vez, se
+  aparecer que o app não pode ser aberto, vá em Ajustes do Sistema → Privacidade e Segurança e
+  clique em **Abrir Mesmo Assim**.
+- **Windows** (64 bits): rode o `.exe`. Se o SmartScreen avisar, clique em **Mais informações** →
+  **Executar assim mesmo**.
+- **Linux** (x86_64): dê permissão de execução e abra:
+  `chmod +x FalaQueEuTranscrevo-linux-x86_64.AppImage && ./FalaQueEuTranscrevo-linux-x86_64.AppImage`
 
 Nomes técnicos: pasta e pacote Dart `transcritor`, bundle id `dev.rssviana.transcritor`,
 executável `transcritor` no Windows e no Linux.
@@ -185,16 +218,26 @@ cp ffmpeg whisper-cli build/linux/x64/release/bundle/bin/
 #   build\windows\x64\runner\Release\bin\whisper-cli.exe
 ```
 
-## Builds no GitHub Actions
+## Builds e releases no GitHub Actions
 
-`.github/workflows/build.yml` compila o app para macOS, Windows e Linux, baixa/compila
-ffmpeg e whisper-cli estáticos, coloca tudo na pasta `bin` e publica um artefato por
-plataforma. Roda em push de tag `v*` ou manualmente (workflow_dispatch).
+`.github/workflows/build.yml`:
+
+- **push na `main` e pull requests**: `flutter analyze` + `flutter test`.
+- **Actions → Build → Run workflow**: também gera os três instaladores como artefatos do run.
+- **tag `v*`** (ex.: `git tag v0.1.0 && git push origin v0.1.0`): gera os instaladores e publica
+  uma Release com nomes fixos, que são os arquivos dos botões de download acima:
+  - `FalaQueEuTranscrevo-macos.dmg` (Apple Silicon, assinatura ad-hoc)
+  - `FalaQueEuTranscrevo-windows-setup.exe` (Inno Setup, `packaging/windows/installer.iss`)
+  - `FalaQueEuTranscrevo-linux-x86_64.AppImage` (`packaging/linux/`)
+
+O whisper-cli (versão fixa em `WHISPER_CPP_VERSION`) é compilado estático em cada plataforma. O
+ffmpeg vem dos builds estáticos do BtbN no Windows e no Linux e é compilado do código-fonte oficial
+no macOS (com cache). A versão do app vem do `version:` do `pubspec.yaml`.
 
 ## Limitações conhecidas
 
-- Sem assinatura/notarização no macOS: na primeira abertura, use botão direito → Abrir.
-- Sem instaladores (dmg/msi/AppImage) ainda: os artefatos são a pasta do app compactada.
+- Sem assinatura de código: macOS sem notarização e Windows sem certificado (ver Instalação).
+- macOS só para Apple Silicon por enquanto (o runner `macos-14` é arm64).
 - Arquivos sem trilha de áudio falham na etapa do ffmpeg (a mensagem de erro mostra o motivo).
 - A notificação de fim usa `osascript` (macOS), `notify-send` (Linux) e um balão do PowerShell
   (Windows). No macOS ela aparece como vinda do "Script Editor".
