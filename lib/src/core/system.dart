@@ -37,7 +37,7 @@ const installGuides = <String, InstallGuide>{
     // pasta que o BinaryLocator procura no Windows.
     InstallCommand(
       Tool.whisper,
-      r'$d="$env:LOCALAPPDATA\FalaQueEuTranscrevo\bin"; '
+      r'$d="$env:LOCALAPPDATA\dev.fqet.falaqueeutranscrevo\bin"; '
       r'iwr https://github.com/ggml-org/whisper.cpp/releases/latest/download/whisper-bin-x64.zip -OutFile "$env:TEMP\whisper.zip"; '
       r'Expand-Archive "$env:TEMP\whisper.zip" $d -Force',
     ),

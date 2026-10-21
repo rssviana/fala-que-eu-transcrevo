@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../src/core/app_paths.dart';
 import '../src/core/binary_locator.dart';
 import '../src/core/catalog.dart';
 import '../src/core/export.dart';
@@ -99,7 +100,12 @@ class AppController extends ChangeNotifier {
   Directory? _tempDir;
 
   Future<void> init({Directory? supportDir, Directory? tempDir}) async {
-    final support = supportDir ?? await getApplicationSupportDirectory();
+    final dataDir = appDataDir(currentOs, _environment ?? Platform.environment);
+    final support =
+        supportDir ??
+        (dataDir != null
+            ? Directory(dataDir)
+            : await getApplicationSupportDirectory());
     _store = ModelStore(Directory(p.join(support.path, 'models')));
     _tempDir = Directory(
       p.join((tempDir ?? await getTemporaryDirectory()).path, 'transcritor'),

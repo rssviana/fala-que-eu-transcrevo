@@ -69,7 +69,7 @@ Os modelos ggml **não vão no instalador**: são baixados do Hugging Face no pr
 para a pasta `models` dentro da pasta de dados do app:
 
 - macOS: `~/Library/Application Support/dev.fqet.falaqueeutranscrevo/models`
-- Windows: `%APPDATA%\dev.fqet\Fala que eu transcrevo!\models`
+- Windows: `%APPDATA%\dev.fqet.falaqueeutranscrevo\models`
 - Linux: `~/.local/share/dev.fqet.falaqueeutranscrevo/models`
 
 | Modelo | Arquivo | Tamanho | Rapidez | Precisão |
@@ -155,7 +155,7 @@ Em ordem, parando no primeiro encontrado (`lib/src/core/binary_locator.dart`):
    - Windows e Linux: `bin/` ao lado do executável
 2. `PATH` do sistema
 3. Pastas comuns: `/opt/homebrew/bin`, `/usr/local/bin` (macOS); `/usr/local/bin`, `/usr/bin`,
-   `/snap/bin` (Linux); `%LOCALAPPDATA%\FalaQueEuTranscrevo\bin` (e `bin\Release`) no Windows.
+   `/snap/bin` (Linux); `%LOCALAPPDATA%\dev.fqet.falaqueeutranscrevo\bin` (e `bin\Release`) no Windows.
    Apps abertos pelo Finder não herdam o `PATH` do shell, por isso o fallback.
 
 ### Comandos de instalação da tela "Primeira execução"
@@ -163,7 +163,7 @@ Em ordem, parando no primeiro encontrado (`lib/src/core/binary_locator.dart`):
 | SO | ffmpeg | whisper-cli |
 |---|---|---|
 | macOS | `brew install ffmpeg` | `brew install whisper-cpp` (os dois juntos viram um comando só) |
-| Windows | `winget install Gyan.FFmpeg` | não há pacote no winget: um comando de PowerShell baixa o `whisper-bin-x64.zip` oficial para `%LOCALAPPDATA%\FalaQueEuTranscrevo\bin` |
+| Windows | `winget install Gyan.FFmpeg` | não há pacote no winget: um comando de PowerShell baixa o `whisper-bin-x64.zip` oficial para `%LOCALAPPDATA%\dev.fqet.falaqueeutranscrevo\bin` |
 | Linux | `sudo apt install ffmpeg` | `sudo snap install whisper-cpp && sudo snap alias whisper-cpp.cli whisper-cli` (snap **não oficial**) |
 
 Ainda não testados em Windows e Linux de verdade. O snap tem confinamento estrito e pode não

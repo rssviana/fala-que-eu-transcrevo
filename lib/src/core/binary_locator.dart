@@ -1,5 +1,7 @@
 import 'package:path/path.dart' as p;
 
+import 'app_paths.dart';
+
 /// Ferramentas externas que o app executa.
 enum Tool {
   ffmpeg(['ffmpeg']),
@@ -68,7 +70,7 @@ class BinaryLocator {
   List<String> get _windowsUserBinDirs {
     final local = environment['LOCALAPPDATA'];
     if (local == null) return const [];
-    final dir = _p.join(local, 'FalaQueEuTranscrevo', 'bin');
+    final dir = windowsUserBinDir(local);
     return [dir, _p.join(dir, 'Release')];
   }
 

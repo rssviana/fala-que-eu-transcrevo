@@ -35,13 +35,16 @@ void main() {
 
   test('Windows: comando extrai na pasta que o BinaryLocator procura', () {
     final cmd = installCommandsFor('windows', {Tool.whisper}).single;
-    expect(cmd, contains(r'$env:LOCALAPPDATA\FalaQueEuTranscrevo\bin'));
+    expect(
+      cmd,
+      contains(r'$env:LOCALAPPDATA\dev.fqet.falaqueeutranscrevo\bin'),
+    );
     final locator = BinaryLocator(
       os: 'windows',
       executablePath: r'C:\App\transcritor.exe',
       environment: {'Path': '', 'LOCALAPPDATA': r'C:\Users\a\AppData\Local'},
       isFile: {
-        r'C:\Users\a\AppData\Local\FalaQueEuTranscrevo\bin\Release\whisper-cli.exe',
+        r'C:\Users\a\AppData\Local\dev.fqet.falaqueeutranscrevo\bin\Release\whisper-cli.exe',
       }.contains,
     );
     expect(locator.find(Tool.whisper), isNotNull);
