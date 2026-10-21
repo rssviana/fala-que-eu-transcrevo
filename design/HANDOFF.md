@@ -26,45 +26,45 @@ Os valores em `px` deste documento e do HTML equivalem a **pixels lógicos** no 
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--bg` | `#0C0E13` | Fundo da janela |
-| `--surface` | `#14171E` | Cartões, inputs, botões secundários |
-| `--surface-sunken` | `#11141A` | Dropzone, painel de transcrição |
-| `--surface-raised` | `#1B1F28` | Botão "Copiar" do comando |
-| `--surface-code` | `#0F1217` | Fundo da linha de comando |
-| `--surface-hover-row` | `#1A1E26` | Trecho destacado na transcrição |
-| `--icon-tile` | `#1E232D` | Quadrado do ícone na checklist |
-| `--track` | `#232834` | Trilho da barra de progresso, miniatura de vídeo |
-| `--border` | `#262B36` | Borda padrão |
-| `--border-subtle` | `#222731` | Divisores internos de cartões |
-| `--border-header` | `#1E222B` | Linha abaixo do header e acima do footer |
-| `--border-strong` | `#343B48` | Borda tracejada do dropzone, círculo de etapa pendente |
-| `--border-button` | `#2C323D` | Borda do botão "Copiar" |
-| `--text` | `#ECEEF2` | Texto principal |
-| `--text-body` | `#DDE1E7` | Texto da transcrição final |
-| `--text-strong-muted` | `#C9CED8` | Rótulos, ícones de botões |
-| `--text-muted` | `#A1A8B5` | Texto secundário |
-| `--text-faint` | `#8B93A1` | Dicas, timestamps |
-| `--accent` | `#FF7A55` | Cor principal (coral) |
-| `--on-accent` | `#1A0B05` | Texto/ícone sobre o accent |
-| `--accent-text` | `#FF9B7D` | Links |
-| `--accent-text-hover` | `#FFC2AE` | Link em hover |
-| `--accent-soft-text` | `#FFB59E` | Selos, timestamps do resultado, rótulos "Ideal" |
-| `--accent-selected-bg` | `#1E1712` | Fundo do cartão de modelo selecionado |
-| `--accent-ring` | `rgba(255,122,85,0.10)` | Anel externo do cartão selecionado (`box-shadow: 0 0 0 4px`) |
-| `--accent-card-bg` | `#1A1410` | Cartão "Pronto!" |
-| `--accent-card-border` | `#3A2A20` | Borda do cartão "Pronto!" |
-| `--accent-chip-bg` | `#241914` | Fundo do selo de extensão (TXT/SRT/VTT) |
-| `--success` | `#4ADE80` | Ponto de status OK |
-| `--success-text` | `#86EFAC` | Texto/ícone de sucesso |
-| `--success-bg` | `#14231A` | Fundo de selo/ícone de sucesso |
-| `--warning` | `#FBBF24` | Ponto de status pendente |
-| `--warning-text` | `#FCD34D` | Texto de aviso |
-| `--warning-bg` | `#2A2212` | Fundo de selo de aviso |
-| `--wave-idle` | `#3A4150` | Barras da onda fora do destaque |
-| `--meter-off` | `#2C323D` | Pontinho de medidor apagado |
-| `--meter-speed-on` | `#CBD2DC` | Pontinho aceso de "Rapidez" |
+| `--bg` | `#2F243A` | Fundo da janela |
+| `--surface` | `#3A3047` | Cartões, inputs, botões secundários |
+| `--surface-sunken` | `#281E32` | Dropzone, painel de transcrição |
+| `--surface-raised` | `#444054` | Botão "Copiar" do comando |
+| `--surface-code` | `#241B2D` | Fundo da linha de comando |
+| `--surface-hover-row` | `#3F354C` | Trecho destacado na transcrição |
+| `--icon-tile` | `#444054` | Quadrado do ícone na checklist |
+| `--track` | `#4A4259` | Trilho da barra de progresso, miniatura de vídeo |
+| `--border` | `#4A4259` | Borda padrão |
+| `--border-subtle` | `#3F354C` | Divisores internos de cartões |
+| `--border-header` | `#3A3047` | Linha abaixo do header e acima do footer |
+| `--border-strong` | `#5A5468` | Borda tracejada do dropzone, círculo de etapa pendente |
+| `--border-button` | `#565068` | Borda do botão "Copiar" |
+| `--text` | `#F6EEEA` | Texto principal |
+| `--text-body` | `#E9E2E0` | Texto da transcrição final |
+| `--text-strong-muted` | `#D6D2D2` | Rótulos, ícones de botões |
+| `--text-muted` | `#BEBBBB` | Texto secundário |
+| `--text-faint` | `#A9A3AC` | Dicas, timestamps |
+| `--accent` | `#DB8A74` | Cor principal (salmon) |
+| `--on-accent` | `#2F243A` | Texto/ícone sobre o accent |
+| `--accent-text` | `#FAC9B8` | Links |
+| `--accent-text-hover` | `#FFE3D8` | Link em hover |
+| `--accent-soft-text` | `#FAC9B8` | Selos, timestamps do resultado, rótulos "Ideal" |
+| `--accent-selected-bg` | `#47343F` | Fundo do cartão de modelo selecionado |
+| `--accent-ring` | `rgba(219,138,116,0.22)` | Anel externo do cartão selecionado (`box-shadow: 0 0 0 4px`) |
+| `--accent-card-bg` | `#3D2C3E` | Cartão "Pronto!" |
+| `--accent-card-border` | `#5E4049` | Borda do cartão "Pronto!" |
+| `--accent-chip-bg` | `#4A3342` | Fundo do selo de extensão (TXT/SRT/VTT) |
+| `--success` | `#7FD69A` | Ponto de status OK |
+| `--success-text` | `#A7E3B5` | Texto/ícone de sucesso |
+| `--success-bg` | `#2E3A3B` | Fundo de selo/ícone de sucesso |
+| `--warning` | `#EBC062` | Ponto de status pendente |
+| `--warning-text` | `#F5D58A` | Texto de aviso |
+| `--warning-bg` | `#45383A` | Fundo de selo de aviso |
+| `--wave-idle` | `#5A5468` | Barras da onda fora do destaque |
+| `--meter-off` | `#565068` | Pontinho de medidor apagado |
+| `--meter-speed-on` | `#D6D2D2` | Pontinho aceso de "Rapidez" |
 
-Cores alternativas de accent previstas (deixe o accent como variável para trocar depois): `#7C9CFF`, `#5EEAD4`, `#FACC15`.
+Paleta base da marca: Midnight Violet `#2F243A` (fundo), Vintage Grape `#444054` (superfícies elevadas), Silver `#BEBBBB` (texto secundário), Almond Silk `#FAC9B8` (destaques claros, links), Salmon `#DB8A74` (accent). Os demais tokens são tons intermediários derivados dela para dar profundidade e manter o contraste. Mantenha o accent como variável.
 
 ### Tipografia
 
@@ -114,12 +114,14 @@ Largura máxima do `main`: Início **1040px**, Setup **760px**, Transcrevendo **
 `flex`, `flex-wrap: wrap`, `align-items: center`, `justify-content: space-between`, `gap: 16px`.
 
 Esquerda (gap 12px):
-- **Logo**: quadrado 38×38, raio 11px, fundo `--accent`, ícone 22px centralizado, traço `--on-accent`, `stroke-width 2.2`:
+- **Logo** ("Onda que se acalma"): o ícone do app em 38×38. Use `logo/icon.svg` (via `flutter_svg`) ou desenhe com este SVG, viewBox 64×64:
   ```svg
-  <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/>
-  <path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/>
+  <rect width="64" height="64" rx="15" fill="#2F243A"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#5A5468"/>
+  <path d="M9 32 C11 15 16 15 18 32 C20 47 24.5 47 26.5 32 C28 23 31 23 32.5 32 C33.5 37 35.5 37 36.5 32 L46 32" fill="none" stroke="#DB8A74" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="50" y="22" width="4.5" height="20" rx="2.25" fill="#FAC9B8"/>
   ```
-  Use esse mesmo desenho como ícone do app (dock, barra de tarefas, instaladores).
+  Os ícones do app (dock, barra de tarefas, instaladores) estão prontos na pasta `logo/`. Veja a seção **Ícone do app**.
 - Coluna com gap 2px: **"Fala que eu transcrevo!"** e **"Vídeo vira texto, sem sair do seu computador"**.
 
 Direita muda por tela (ver cada tela).
@@ -359,11 +361,24 @@ Substitui o antigo banner vermelho de erro. Aparece no início se faltar qualque
 - Transições curtas (150ms) em cor, borda e sombra. Respeite `prefers-reduced-motion` (desligue pulso, cursor piscando e giro).
 - Atalhos: `Ctrl/Cmd+O` abre o seletor de vídeo na Tela 1; `Ctrl/Cmd+F` foca a busca na Tela 4.
 
+## Ícone do app
+
+Substitua os ícones padrão do Flutter pelos da pasta `logo/` (detalhes em `logo/LEIA-ME.txt`):
+
+| Plataforma | Origem | Destino no projeto Flutter |
+|---|---|---|
+| Windows | `logo/windows/app_icon.ico` | `windows/runner/resources/app_icon.ico` |
+| macOS | `logo/macos/app_icon_16.png` … `app_icon_1024.png` | `macos/Runner/Assets.xcassets/AppIcon.appiconset/` (mesmos nomes; mantenha o `Contents.json`) |
+| Linux | `logo/png/icon-256.png` (e demais tamanhos) | Copie para `linux/` (ex.: `linux/assets/app_icon.png`), defina como ícone da janela em `linux/runner/my_application.cc` com `gtk_window_set_icon_from_file`, e use nos pacotes (.desktop / AppImage / snap / flatpak) |
+| Dentro do app (header) | `logo/icon.svg` | `assets/brand/icon.svg`, declarado no `pubspec.yaml` |
+
+A versão macOS já tem margem e sombra (padrão do Dock); não use os PNGs de `logo/png/` no macOS. `logo/marca/` e `logo/lockup/` são para site, README e materiais de divulgação.
+
 ## Mapeamento para Flutter
 
 ### Tokens
 
-- Crie `lib/theme/app_colors.dart` com uma classe `AppColors` contendo **todos** os tokens de cor da tabela, com os mesmos nomes em camelCase (`bg`, `surface`, `surfaceSunken`, `accent`, `onAccent`, `accentSoftText`, `successBg`…). Ex.: `static const accent = Color(0xFFFF7A55);` e `accentRing = Color(0x1AFF7A55)`.
+- Crie `lib/theme/app_colors.dart` com uma classe `AppColors` contendo **todos** os tokens de cor da tabela, com os mesmos nomes em camelCase (`bg`, `surface`, `surfaceSunken`, `accent`, `onAccent`, `accentSoftText`, `successBg`…). Ex.: `static const accent = Color(0xFFDB8A74);` e `accentRing = Color(0x38DB8A74)`.
 - Deixe o accent trocável: um `ThemeExtension<AppPalette>` com os tokens derivados do accent, ou um `ValueNotifier<Color>` lido pelos widgets.
 - `lib/theme/app_text.dart` com os estilos da tabela de tipografia (`brandName`, `dropzoneTitle`, `setupH1`, `percent`, `doneTitle`, `modelName`, `sectionLabel`, `eyebrow`, `body`, `hint`, `mono`…). `letterSpacing` em Flutter é absoluto: converta `em` multiplicando pelo tamanho (−0.02em em 30px = −0.6).
 - `line-height` do CSS vira `height` no `TextStyle` (1.6 → `height: 1.6`).

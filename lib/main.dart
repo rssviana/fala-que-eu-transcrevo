@@ -21,8 +21,8 @@ void main() {
   runApp(FalaQueEuTranscrevoApp(controller: controller));
 }
 
-/// Accent atual (trocável: #FF7A55 coral, #7C9CFF, #5EEAD4, #FACC15).
-final accentPalette = ValueNotifier<AccentPalette>(AccentPalette.coral);
+/// Accent atual (Salmon #DB8A74), trocável.
+final accentPalette = ValueNotifier<AccentPalette>(AccentPalette.salmon);
 
 ThemeData buildTheme(AccentPalette palette) {
   final base = ThemeData(

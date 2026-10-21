@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Pacotes de design originais (o conteúdo extraído fica em design/)
+design/*.zip

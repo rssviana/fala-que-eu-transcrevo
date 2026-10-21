@@ -4,52 +4,53 @@ import 'package:flutter/material.dart';
 /// Os que derivam do accent também estão em [AccentPalette], que é trocável.
 abstract final class AppColors {
   // superfícies
-  static const bg = Color(0xFF0C0E13);
-  static const surface = Color(0xFF14171E);
-  static const surfaceSunken = Color(0xFF11141A);
-  static const surfaceRaised = Color(0xFF1B1F28);
-  static const surfaceCode = Color(0xFF0F1217);
-  static const surfaceHoverRow = Color(0xFF1A1E26);
-  static const iconTile = Color(0xFF1E232D);
-  static const track = Color(0xFF232834);
+  static const bg = Color(0xFF2F243A);
+  static const surface = Color(0xFF3A3047);
+  static const surfaceSunken = Color(0xFF281E32);
+  static const surfaceRaised = Color(0xFF444054);
+  static const surfaceCode = Color(0xFF241B2D);
+  static const surfaceHoverRow = Color(0xFF3F354C);
+  static const iconTile = Color(0xFF444054);
+  static const track = Color(0xFF4A4259);
   // bordas
-  static const border = Color(0xFF262B36);
-  static const borderSubtle = Color(0xFF222731);
-  static const borderHeader = Color(0xFF1E222B);
-  static const borderStrong = Color(0xFF343B48);
-  static const borderButton = Color(0xFF2C323D);
+  static const border = Color(0xFF4A4259);
+  static const borderSubtle = Color(0xFF3F354C);
+  static const borderHeader = Color(0xFF3A3047);
+  static const borderStrong = Color(0xFF5A5468);
+  static const borderButton = Color(0xFF565068);
   // texto
-  static const text = Color(0xFFECEEF2);
-  static const textBody = Color(0xFFDDE1E7);
-  static const textStrongMuted = Color(0xFFC9CED8);
-  static const textMuted = Color(0xFFA1A8B5);
-  static const textFaint = Color(0xFF8B93A1);
-  // accent (coral) — valores padrão; use context.palette para o atual
-  static const accent = Color(0xFFFF7A55);
-  static const onAccent = Color(0xFF1A0B05);
-  static const accentText = Color(0xFFFF9B7D);
-  static const accentTextHover = Color(0xFFFFC2AE);
-  static const accentSoftText = Color(0xFFFFB59E);
-  static const accentSelectedBg = Color(0xFF1E1712);
-  static const accentRing = Color(0x1AFF7A55);
-  static const accentCardBg = Color(0xFF1A1410);
-  static const accentCardBorder = Color(0xFF3A2A20);
-  static const accentChipBg = Color(0xFF241914);
+  static const text = Color(0xFFF6EEEA);
+  static const textBody = Color(0xFFE9E2E0);
+  static const textStrongMuted = Color(0xFFD6D2D2);
+  static const textMuted = Color(0xFFBEBBBB);
+  static const textFaint = Color(0xFFA9A3AC);
+  // accent (Salmon) — valores padrão; use context.palette para o atual
+  static const accent = Color(0xFFDB8A74);
+  static const onAccent = Color(0xFF2F243A);
+  static const accentText = Color(0xFFFAC9B8);
+  static const accentTextHover = Color(0xFFFFE3D8);
+  static const accentSoftText = Color(0xFFFAC9B8);
+  static const accentSelectedBg = Color(0xFF47343F);
+  static const accentRing = Color(0x38DB8A74); // rgba(219,138,116,0.22)
+  static const accentCardBg = Color(0xFF3D2C3E);
+  static const accentCardBorder = Color(0xFF5E4049);
+  static const accentChipBg = Color(0xFF4A3342);
   // status
-  static const success = Color(0xFF4ADE80);
-  static const successText = Color(0xFF86EFAC);
-  static const successBg = Color(0xFF14231A);
-  static const warning = Color(0xFFFBBF24);
-  static const warningText = Color(0xFFFCD34D);
-  static const warningBg = Color(0xFF2A2212);
+  static const success = Color(0xFF7FD69A);
+  static const successText = Color(0xFFA7E3B5);
+  static const successBg = Color(0xFF2E3A3B);
+  static const warning = Color(0xFFEBC062);
+  static const warningText = Color(0xFFF5D58A);
+  static const warningBg = Color(0xFF45383A);
   // decorativos
-  static const waveIdle = Color(0xFF3A4150);
-  static const meterOff = Color(0xFF2C323D);
-  static const meterSpeedOn = Color(0xFFCBD2DC);
+  static const waveIdle = Color(0xFF5A5468);
+  static const meterOff = Color(0xFF565068);
+  static const meterSpeedOn = Color(0xFFD6D2D2);
 }
 
 /// Tokens derivados do accent. Fica no tema como extensão para dar para trocar
-/// o accent depois (alternativas previstas: #7C9CFF, #5EEAD4, #FACC15).
+/// o accent depois. Paleta da marca: Midnight Violet #2F243A, Vintage Grape
+/// #444054, Silver #BEBBBB, Almond Silk #FAC9B8, Salmon #DB8A74.
 @immutable
 class AccentPalette extends ThemeExtension<AccentPalette> {
   const AccentPalette({
@@ -65,7 +66,7 @@ class AccentPalette extends ThemeExtension<AccentPalette> {
     required this.accentChipBg,
   });
 
-  static const coral = AccentPalette(
+  static const salmon = AccentPalette(
     accent: AppColors.accent,
     onAccent: AppColors.onAccent,
     accentText: AppColors.accentText,
@@ -121,5 +122,5 @@ class AccentPalette extends ThemeExtension<AccentPalette> {
 
 extension PaletteContext on BuildContext {
   AccentPalette get palette =>
-      Theme.of(this).extension<AccentPalette>() ?? AccentPalette.coral;
+      Theme.of(this).extension<AccentPalette>() ?? AccentPalette.salmon;
 }

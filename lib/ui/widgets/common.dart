@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
 import '../../theme/app_colors.dart';
@@ -144,7 +145,6 @@ class AppHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.palette;
     final h = sidePadding(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: h, vertical: h == 20 ? 16 : 18),
@@ -161,19 +161,12 @@ class AppHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             spacing: 12,
             children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: p.accent,
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                alignment: Alignment.center,
-                child: AppIcon(
-                  AppIcons.logo,
-                  size: 22,
-                  strokeWidth: 2.2,
-                  color: p.onAccent,
+              // Logo "Onda que se acalma" (o próprio ícone do app).
+              ExcludeSemantics(
+                child: SvgPicture.asset(
+                  'assets/brand/icon.svg',
+                  width: 38,
+                  height: 38,
                 ),
               ),
               Column(

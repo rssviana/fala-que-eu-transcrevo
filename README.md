@@ -101,8 +101,15 @@ lib/
 Fontes da interface embutidas em `assets/fonts` (licenças OFL ao lado). São fontes variáveis; o
 peso e o eixo óptico vão em `FontVariation`. A altura de linha "normal" de cada fonte é fixada em
 `app_text.dart` para bater com o navegador (o Flutter usaria as métricas "win", ~18% mais altas).
-O ícone do app (`assets/icon/app_icon_1024.png`) é o logo do header; está instalado no macOS e no
-Windows (`windows/runner/resources/app_icon.ico`).
+Paleta (Midnight Violet `#2F243A`, Vintage Grape `#444054`, Silver `#BEBBBB`, Almond Silk
+`#FAC9B8`, Salmon `#DB8A74`) e ícone "Onda que se acalma" vêm do pacote de design em `design/`
+(`design/logo/` tem os arquivos originais). Ícone instalado em:
+
+- macOS: `macos/Runner/Assets.xcassets/AppIcon.appiconset/` (versão com margem e sombra)
+- Windows: `windows/runner/resources/app_icon.ico`
+- Linux: `linux/assets/app_icon.png`, instalado em `data/` e aplicado à janela em
+  `linux/runner/my_application.cc`
+- Header do app: `assets/brand/icon.svg`
 
 ## Onde o app procura os binários
 
@@ -191,7 +198,6 @@ plataforma. Roda em push de tag `v*` ou manualmente (workflow_dispatch).
 - Arquivos sem trilha de áudio falham na etapa do ffmpeg (a mensagem de erro mostra o motivo).
 - A notificação de fim usa `osascript` (macOS), `notify-send` (Linux) e um balão do PowerShell
   (Windows). No macOS ela aparece como vinda do "Script Editor".
-- Linux ainda sem ícone de janela.
 
 > O workflow ainda não rodou: o projeto não tem repositório remoto. Ao subir para o GitHub,
 > confira o primeiro run, principalmente o download do ffmpeg do macOS (fonte de terceiros).

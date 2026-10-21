@@ -17,48 +17,48 @@
 /* ============================== TOKENS ============================== */
 :root{
   /* superfícies */
-  --bg:#0C0E13;
-  --surface:#14171E;
-  --surface-sunken:#11141A;
-  --surface-raised:#1B1F28;
-  --surface-code:#0F1217;
-  --surface-hover-row:#1A1E26;
-  --icon-tile:#1E232D;
-  --track:#232834;
+  --bg:#2F243A;
+  --surface:#3A3047;
+  --surface-sunken:#281E32;
+  --surface-raised:#444054;
+  --surface-code:#241B2D;
+  --surface-hover-row:#3F354C;
+  --icon-tile:#444054;
+  --track:#4A4259;
   /* bordas */
-  --border:#262B36;
-  --border-subtle:#222731;
-  --border-header:#1E222B;
-  --border-strong:#343B48;
-  --border-button:#2C323D;
+  --border:#4A4259;
+  --border-subtle:#3F354C;
+  --border-header:#3A3047;
+  --border-strong:#5A5468;
+  --border-button:#565068;
   /* texto */
-  --text:#ECEEF2;
-  --text-body:#DDE1E7;
-  --text-strong-muted:#C9CED8;
-  --text-muted:#A1A8B5;
-  --text-faint:#8B93A1;
-  /* accent (coral). Alternativas: #7C9CFF, #5EEAD4, #FACC15 */
-  --accent:#FF7A55;
-  --on-accent:#1A0B05;
-  --accent-text:#FF9B7D;
-  --accent-text-hover:#FFC2AE;
-  --accent-soft-text:#FFB59E;
-  --accent-selected-bg:#1E1712;
-  --accent-ring:rgba(255,122,85,0.10);
-  --accent-card-bg:#1A1410;
-  --accent-card-border:#3A2A20;
-  --accent-chip-bg:#241914;
+  --text:#F6EEEA;
+  --text-body:#E9E2E0;
+  --text-strong-muted:#D6D2D2;
+  --text-muted:#BEBBBB;
+  --text-faint:#A9A3AC;
+  /* accent: Salmon. Paleta base: Midnight Violet #2F243A, Vintage Grape #444054, Silver #BEBBBB, Almond Silk #FAC9B8, Salmon #DB8A74 */
+  --accent:#DB8A74;
+  --on-accent:#2F243A;
+  --accent-text:#FAC9B8;
+  --accent-text-hover:#FFE3D8;
+  --accent-soft-text:#FAC9B8;
+  --accent-selected-bg:#47343F;
+  --accent-ring:rgba(219,138,116,0.22);
+  --accent-card-bg:#3D2C3E;
+  --accent-card-border:#5E4049;
+  --accent-chip-bg:#4A3342;
   /* status */
-  --success:#4ADE80;
-  --success-text:#86EFAC;
-  --success-bg:#14231A;
-  --warning:#FBBF24;
-  --warning-text:#FCD34D;
-  --warning-bg:#2A2212;
+  --success:#7FD69A;
+  --success-text:#A7E3B5;
+  --success-bg:#2E3A3B;
+  --warning:#EBC062;
+  --warning-text:#F5D58A;
+  --warning-bg:#45383A;
   /* decorativos */
-  --wave-idle:#3A4150;
-  --meter-off:#2C323D;
-  --meter-speed-on:#CBD2DC;
+  --wave-idle:#5A5468;
+  --meter-off:#565068;
+  --meter-speed-on:#D6D2D2;
   /* fontes */
   --font-display:'Bricolage Grotesque',system-ui,sans-serif;
   --font-ui:Inter,system-ui,sans-serif;
@@ -67,7 +67,7 @@
 
 /* ============================== PÁGINA DE REFERÊNCIA (não faz parte do app) ============================== */
 *{box-sizing:border-box}
-html,body{margin:0;background:#07080B;color:var(--text);font-family:var(--font-ui)}
+html,body{margin:0;background:#1F1727;color:var(--text);font-family:var(--font-ui)}
 .ref-page{padding:48px 24px 96px;display:flex;flex-direction:column;align-items:center;gap:64px}
 .ref-intro{max-width:1120px;width:100%;display:flex;flex-direction:column;gap:8px}
 .ref-intro h1{margin:0;font-family:var(--font-display);font-size:40px;font-weight:800;letter-spacing:-0.02em}
@@ -75,7 +75,7 @@ html,body{margin:0;background:#07080B;color:var(--text);font-family:var(--font-u
 .ref-screen{width:100%;max-width:1120px;display:flex;flex-direction:column;gap:12px}
 .ref-label{font-family:var(--font-mono);font-size:13px;color:var(--text-muted)}
 .ref-label b{color:var(--text);font-weight:500}
-.window{width:100%;min-height:780px;border-radius:12px;overflow:hidden;border:1px solid #2A2F3A;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.window{width:100%;min-height:780px;border-radius:12px;overflow:hidden;border:1px solid #4A4259;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 
 /* ============================== APP ============================== */
 .app{min-height:780px;background:var(--bg);color:var(--text);font-family:var(--font-ui);display:flex;flex-direction:column}
@@ -273,7 +273,7 @@ svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:roun
 
 <div class="ref-intro">
   <h1>Fala que eu transcrevo!</h1>
-  <p>Referência visual das 4 telas. Tema escuro, accent coral <code>#FF7A55</code>. Fontes: Bricolage Grotesque (display), Inter (interface), JetBrains Mono (mono). Os cartões de modelo (tela 1) e as abas de sistema (tela 2) são clicáveis.</p>
+  <p>Referência visual das 4 telas. Tema escuro violeta (Midnight Violet <code>#2F243A</code>), accent Salmon <code>#DB8A74</code>, destaques Almond Silk <code>#FAC9B8</code>. Fontes: Bricolage Grotesque (display), Inter (interface), JetBrains Mono (mono). Os cartões de modelo (tela 1) e as abas de sistema (tela 2) são clicáveis.</p>
 </div>
 
 <!-- ============================================================ -->
@@ -285,9 +285,7 @@ svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:roun
 
   <header class="header">
     <div class="brand">
-      <div class="logo">
-        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
-      </div>
+      <svg width="38" height="38" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#2F243A"/><rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#5A5468"/><path d="M9 32 C11 15 16 15 18 32 C20 47 24.5 47 26.5 32 C28 23 31 23 32.5 32 C33.5 37 35.5 37 36.5 32 L46 32" fill="none" stroke="#DB8A74" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="50" y="22" width="4.5" height="20" rx="2.25" fill="#FAC9B8"/></svg>
       <div class="brand-text">
         <span class="brand-name">Fala que eu transcrevo!</span>
         <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
@@ -408,9 +406,7 @@ svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:roun
 
   <header class="header">
     <div class="brand">
-      <div class="logo">
-        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
-      </div>
+      <svg width="38" height="38" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#2F243A"/><rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#5A5468"/><path d="M9 32 C11 15 16 15 18 32 C20 47 24.5 47 26.5 32 C28 23 31 23 32.5 32 C33.5 37 35.5 37 36.5 32 L46 32" fill="none" stroke="#DB8A74" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="50" y="22" width="4.5" height="20" rx="2.25" fill="#FAC9B8"/></svg>
       <div class="brand-text">
         <span class="brand-name">Fala que eu transcrevo!</span>
         <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
@@ -476,9 +472,7 @@ svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:roun
 
   <header class="header">
     <div class="brand">
-      <div class="logo">
-        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
-      </div>
+      <svg width="38" height="38" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#2F243A"/><rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#5A5468"/><path d="M9 32 C11 15 16 15 18 32 C20 47 24.5 47 26.5 32 C28 23 31 23 32.5 32 C33.5 37 35.5 37 36.5 32 L46 32" fill="none" stroke="#DB8A74" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="50" y="22" width="4.5" height="20" rx="2.25" fill="#FAC9B8"/></svg>
       <div class="brand-text">
         <span class="brand-name">Fala que eu transcrevo!</span>
         <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
@@ -544,9 +538,7 @@ svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:roun
 
   <header class="header">
     <div class="brand">
-      <div class="logo">
-        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
-      </div>
+      <svg width="38" height="38" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#2F243A"/><rect x="0.5" y="0.5" width="63" height="63" rx="14.5" fill="none" stroke="#5A5468"/><path d="M9 32 C11 15 16 15 18 32 C20 47 24.5 47 26.5 32 C28 23 31 23 32.5 32 C33.5 37 35.5 37 36.5 32 L46 32" fill="none" stroke="#DB8A74" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="50" y="22" width="4.5" height="20" rx="2.25" fill="#FAC9B8"/></svg>
       <div class="brand-text">
         <span class="brand-name">Fala que eu transcrevo!</span>
         <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>

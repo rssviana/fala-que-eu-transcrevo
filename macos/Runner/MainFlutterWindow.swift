@@ -10,7 +10,7 @@ class MainFlutterWindow: NSWindow {
     self.setContentSize(NSSize(width: 1120, height: 780))
     self.contentMinSize = NSSize(width: 720, height: 600)
     self.title = "Fala que eu transcrevo!"
-    self.backgroundColor = NSColor(red: 0x0C / 255.0, green: 0x0E / 255.0, blue: 0x13 / 255.0, alpha: 1)
+    self.backgroundColor = NSColor(red: 0x2F / 255.0, green: 0x24 / 255.0, blue: 0x3A / 255.0, alpha: 1)
     self.center()
 
     RegisterGeneratedPlugins(registry: flutterViewController)

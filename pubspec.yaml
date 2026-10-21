@@ -73,6 +73,8 @@ flutter:
   assets:
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
+    # Logo do header (mesmo desenho do ícone do app; fonte em design/logo/).
+    - assets/brand/icon.svg
 
   # Fontes da interface, embutidas (o app é offline). Licenças OFL em
   # assets/fonts/*-OFL.txt. São fontes variáveis: o mesmo arquivo é declarado

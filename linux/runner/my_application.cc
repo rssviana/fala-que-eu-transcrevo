@@ -59,6 +59,16 @@ static void my_application_activate(GApplication* application) {
   hints.min_height = 600;
   gtk_window_set_geometry_hints(window, nullptr, &hints, GDK_HINT_MIN_SIZE);
 
+  // Ícone da janela: data/app_icon.png ao lado do executável (instalado pelo
+  // linux/CMakeLists.txt a partir de linux/assets/app_icon.png).
+  g_autofree gchar* exe_path = g_file_read_link("/proc/self/exe", nullptr);
+  if (exe_path != nullptr) {
+    g_autofree gchar* exe_dir = g_path_get_dirname(exe_path);
+    g_autofree gchar* icon_path =
+        g_build_filename(exe_dir, "data", "app_icon.png", nullptr);
+    gtk_window_set_icon_from_file(window, icon_path, nullptr);
+  }
+
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(
       project, self->dart_entrypoint_arguments);
@@ -67,7 +77,7 @@ static void my_application_activate(GApplication* application) {
   GdkRGBA background_color;
   // Background defaults to black, override it here if necessary, e.g. #00000000
   // for transparent.
-  gdk_rgba_parse(&background_color, "#000000");
+  gdk_rgba_parse(&background_color, "#2F243A");
   fl_view_set_background_color(view, &background_color);
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));

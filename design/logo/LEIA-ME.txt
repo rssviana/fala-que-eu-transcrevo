@@ -1,0 +1,15 @@
+Fala que eu transcrevo! · Logo "Onda que se acalma"
+
+Cores: fundo #2F243A (Midnight Violet) · borda #5A5468 · onda #DB8A74 (Salmon) · cursor #FAC9B8 (Almond Silk)
+
+icon.svg                 Fonte vetorial do ícone (64x64).
+png/icon-*.png           Ícone quadrado (16 a 1024 px). Use no Linux
+                         (linux/ ou instalador: 48, 128, 256, 512) e onde precisar de PNG.
+windows/app_icon.ico     Substitui windows/runner/resources/app_icon.ico no Flutter.
+macos/app_icon_*.png     Versão macOS (com margem e sombra, padrão do Dock).
+                         Substitui os arquivos de macos/Runner/Assets.xcassets/AppIcon.appiconset/
+                         (mesmos nomes: app_icon_16.png ... app_icon_1024.png).
+macos/AppIcon.icns       Mesmo ícone em .icns, se precisar.
+marca/                   Só o símbolo (onda + cursor), fundo transparente.
+                         "fundo-escuro" = cursor Almond Silk; "fundo-claro" = cursor Midnight Violet.
+lockup/                  Símbolo + nome (Bricolage Grotesque 800), em 2x.
