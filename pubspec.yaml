@@ -91,3 +91,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  # Usa Swift Package Manager no macOS em vez de CocoaPods.
+  config:
+    enable-swift-package-manager: true
