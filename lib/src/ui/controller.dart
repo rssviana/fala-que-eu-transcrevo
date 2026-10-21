@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -8,6 +9,7 @@ import '../core/binary_locator.dart';
 import '../core/catalog.dart';
 import '../core/export.dart';
 import '../core/model_store.dart';
+import '../core/pdf_export.dart';
 import '../core/segment.dart';
 import '../core/transcriber.dart';
 
@@ -43,8 +45,20 @@ class AppController extends ChangeNotifier {
   String get modelsDir => _store?.directory.path ?? '';
   bool isModelDownloaded(WhisperModel m) => _store?.isDownloaded(m) ?? false;
 
+  /// Cabeçalho do Markdown/PDF, fixado no início da transcrição (o usuário
+  /// pode trocar idioma e modelo depois sem afetar o resultado).
+  TranscriptInfo? info;
+
   String get plainText => toPlainText(segments);
   String get srt => toSrt(segments);
+  String get markdown => toMarkdown(segments, info!);
+
+  Future<Uint8List> pdf() async => toPdf(
+    segments,
+    info!,
+    regularFont: await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'),
+    boldFont: await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'),
+  );
   String get baseName => videoPath == null
       ? 'transcricao'
       : p.basenameWithoutExtension(videoPath!);
@@ -106,6 +120,13 @@ class AppController extends ChangeNotifier {
     segments.clear();
     errorDetails = null;
     final m = model;
+    final language = languages.firstWhere((l) => l.code == languageCode);
+    info = TranscriptInfo(
+      fileName: p.basename(video),
+      languageLabel: language.label,
+      modelLabel: m.label,
+      date: DateTime.now(),
+    );
     try {
       if (!store.isDownloaded(m)) {
         _set(Phase.downloading, 0, 'Baixando modelo ${m.label}…');
@@ -127,13 +148,10 @@ class AppController extends ChangeNotifier {
         whisperPath: whisperPath!,
         tempDir: Directory(p.join(temp.path, 'transcritor')),
       );
-      final language = languages
-          .firstWhere((l) => l.code == languageCode)
-          .whisperCode;
       final result = await t.run(
         input: video,
         modelPath: store.pathFor(m),
-        language: language,
+        language: language.whisperCode,
         onProgress: (stage, overall) => _set(
           stage == Stage.extracting ? Phase.extracting : Phase.transcribing,
           overall,

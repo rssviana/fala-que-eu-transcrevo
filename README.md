@@ -13,7 +13,12 @@ executável `transcritor` no Windows e no Linux.
 2. Escolhe o idioma (padrão: português do Brasil, ou "Detectar automaticamente") e o modelo.
 3. O **ffmpeg** extrai o áudio em WAV 16 kHz mono para uma pasta temporária.
 4. O **whisper-cli** transcreve. O progresso vem do parse da saída dos dois processos.
-5. O texto aparece na tela; dá para copiar e exportar `.txt` e `.srt`.
+5. O texto aparece na tela; dá para copiar e exportar:
+   - **.txt** — texto corrido, um trecho por linha
+   - **.srt** — legenda com tempos
+   - **.md** — Markdown com título, idioma, modelo, data e parágrafos com tempo de início
+   - **.pdf** — mesmo conteúdo do Markdown, em A4, com a fonte Noto Sans embutida
+     (cobre latim, grego e cirílico; japonês e outros alfabetos não aparecem no PDF)
 
 Os modelos ggml **não vão no instalador**: são baixados do Hugging Face no primeiro uso
 para a pasta de suporte do app (no macOS,
@@ -54,7 +59,8 @@ lib/
     binary_locator.dart  # onde procurar ffmpeg e whisper-cli
     commands.dart        # argumentos do ffmpeg e do whisper-cli
     progress.dart        # parse de progresso e segmentos
-    export.dart          # geração de .txt e .srt
+    export.dart          # .txt, .srt, .md e agrupamento em parágrafos
+    pdf_export.dart      # .pdf (pacote pdf, fontes em assets/fonts)
     transcriber.dart     # pipeline com Process.start + cancelamento
     model_store.dart     # download dos modelos (HttpClient, .part → rename)
   src/ui/              # Flutter

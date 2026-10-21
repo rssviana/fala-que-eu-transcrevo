@@ -48,9 +48,17 @@ void main() {
 
     expect(find.text('aula.mp4'), findsOneWidget);
     expect(find.text('Olá, mundo.'), findsOneWidget);
-    expect(find.text('Exportar .srt'), findsOneWidget);
-    expect(find.text('Exportar .txt'), findsOneWidget);
     expect(find.text('Copiar'), findsOneWidget);
+    await tester.tap(find.text('Exportar'));
+    await tester.pumpAndSettle();
+    for (final label in [
+      'Texto (.txt)',
+      'Legenda (.srt)',
+      'Markdown (.md)',
+      'PDF (.pdf)',
+    ]) {
+      expect(find.text(label), findsOneWidget);
+    }
     expect(tester.takeException(), isNull);
     expect(find.byType(LinearProgressIndicator), findsNothing);
   });

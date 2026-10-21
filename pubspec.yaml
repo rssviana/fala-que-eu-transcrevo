@@ -38,6 +38,10 @@ dependencies:
   file_selector: ^1.1.0
   desktop_drop: ^0.8.4
   path: ^1.9.1
+  pdf: ^3.12.0
+  # Só para travar a versão: o image 4.11 (dependência do pdf) chama
+  # ZLibDecoder.decodeLazy, que não existe no archive <4.1 exigido pelo pdf 3.12.
+  image: ">=4.5.0 <4.11.0"
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +64,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Fonte embutida no PDF (com acentuação). Licença: assets/fonts/OFL.txt
+  assets:
+    - assets/fonts/NotoSans-Regular.ttf
+    - assets/fonts/NotoSans-Bold.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

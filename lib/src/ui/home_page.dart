@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     c.setVideo(path);
   }
 
-  Future<void> _export(String ext, String content) async {
+  Future<void> _export(String ext, Future<List<int>> Function() bytes) async {
     final location = await getSaveLocation(
       suggestedName: '${c.baseName}.$ext',
       acceptedTypeGroups: [
@@ -55,9 +56,27 @@ class _HomePageState extends State<HomePage> {
     if (location == null) return;
     var path = location.path;
     if (p.extension(path).isEmpty) path = '$path.$ext';
-    await File(path).writeAsString(content);
-    _snack('Salvo em $path');
+    try {
+      await File(path).writeAsBytes(await bytes());
+      _snack('Salvo em $path');
+    } catch (e) {
+      _snack('Não foi possível salvar: $e');
+    }
   }
+
+  Future<List<int>> Function() _text(String Function() content) =>
+      () async => utf8.encode(content());
+
+  Widget _exportItem(
+    IconData icon,
+    String label,
+    String ext,
+    Future<List<int>> Function() bytes,
+  ) => MenuItemButton(
+    leadingIcon: Icon(icon),
+    onPressed: () => _export(ext, bytes),
+    child: Text(label),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -266,15 +285,40 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.copy),
                   label: const Text('Copiar'),
                 ),
-                TextButton.icon(
-                  onPressed: done ? () => _export('txt', c.plainText) : null,
-                  icon: const Icon(Icons.description_outlined),
-                  label: const Text('Exportar .txt'),
-                ),
-                TextButton.icon(
-                  onPressed: done ? () => _export('srt', c.srt) : null,
-                  icon: const Icon(Icons.closed_caption_outlined),
-                  label: const Text('Exportar .srt'),
+                MenuAnchor(
+                  builder: (context, menu, _) => TextButton.icon(
+                    onPressed: done
+                        ? () => menu.isOpen ? menu.close() : menu.open()
+                        : null,
+                    icon: const Icon(Icons.download_outlined),
+                    label: const Text('Exportar'),
+                  ),
+                  menuChildren: [
+                    _exportItem(
+                      Icons.description_outlined,
+                      'Texto (.txt)',
+                      'txt',
+                      _text(() => c.plainText),
+                    ),
+                    _exportItem(
+                      Icons.closed_caption_outlined,
+                      'Legenda (.srt)',
+                      'srt',
+                      _text(() => c.srt),
+                    ),
+                    _exportItem(
+                      Icons.notes,
+                      'Markdown (.md)',
+                      'md',
+                      _text(() => c.markdown),
+                    ),
+                    _exportItem(
+                      Icons.picture_as_pdf_outlined,
+                      'PDF (.pdf)',
+                      'pdf',
+                      c.pdf,
+                    ),
+                  ],
                 ),
               ],
             ),

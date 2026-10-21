@@ -33,3 +33,106 @@ String toPlainText(List<Segment> segments) => segments
     .join('\n');
 
 bool _isAnnotation(String t) => RegExp(r'^[\[\(][^\]\)]*[\]\)]$').hasMatch(t);
+
+/// Dados do cabeçalho do Markdown e do PDF.
+class TranscriptInfo {
+  const TranscriptInfo({
+    required this.fileName,
+    required this.languageLabel,
+    required this.modelLabel,
+    required this.date,
+  });
+
+  final String fileName;
+  final String languageLabel;
+  final String modelLabel;
+  final DateTime date;
+}
+
+/// Parágrafo do texto: segmentos consecutivos agrupados, com o tempo de início.
+class Paragraph {
+  const Paragraph(this.start, this.text);
+  final Duration start;
+  final String text;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Paragraph && other.start == start && other.text == text;
+
+  @override
+  int get hashCode => Object.hash(start, text);
+
+  @override
+  String toString() => 'Paragraph($start: $text)';
+}
+
+/// Agrupa segmentos em parágrafos: quebra numa pausa maior que [gap] ou quando
+/// o parágrafo passa de [maxChars] e o segmento anterior terminou uma frase
+/// (ou passa de `2 × maxChars`, para fala sem pontuação).
+List<Paragraph> paragraphs(
+  List<Segment> segments, {
+  Duration gap = const Duration(milliseconds: 1500),
+  int maxChars = 600,
+}) {
+  final result = <Paragraph>[];
+  Duration? start;
+  Duration? lastEnd;
+  final buf = StringBuffer();
+  void flush() {
+    if (buf.isNotEmpty) result.add(Paragraph(start!, buf.toString()));
+    buf.clear();
+  }
+
+  for (final s in segments) {
+    final text = s.text.trim();
+    if (text.isEmpty || _isAnnotation(text)) continue;
+    final paused = lastEnd != null && s.start - lastEnd > gap;
+    final long =
+        buf.length >= maxChars * 2 ||
+        (buf.length >= maxChars && RegExp(r'[.!?…]$').hasMatch(buf.toString()));
+    if (paused || long) flush();
+    if (buf.isEmpty) {
+      start = s.start;
+    } else {
+      buf.write(' ');
+    }
+    buf.write(text);
+    lastEnd = s.end;
+  }
+  flush();
+  return result;
+}
+
+/// `M:SS` ou `H:MM:SS`, para leitura humana.
+String clockLabel(Duration d) {
+  final m = d.inMinutes.remainder(60), s = _two(d.inSeconds.remainder(60));
+  return d.inHours > 0 ? '${d.inHours}:${_two(m)}:$s' : '$m:$s';
+}
+
+/// `21/10/2026 19:07`
+String dateLabel(DateTime d) =>
+    '${_two(d.day)}/${_two(d.month)}/${d.year} ${_two(d.hour)}:${_two(d.minute)}';
+
+String _escapeMarkdown(String text) => text
+    .replaceAllMapped(RegExp(r'([\\`*_\[\]<>])'), (m) => '\\${m[1]}')
+    .replaceFirstMapped(RegExp(r'^(#|\d+\.|[-+] )'), (m) => '\\${m[1]}');
+
+String toMarkdown(List<Segment> segments, TranscriptInfo info) {
+  final buf = StringBuffer()
+    ..writeln('# ${_escapeMarkdown(info.fileName)}')
+    ..writeln()
+    ..writeln('- **Idioma:** ${info.languageLabel}')
+    ..writeln('- **Modelo:** Whisper ${info.modelLabel}')
+    ..writeln('- **Transcrito em:** ${dateLabel(info.date)}')
+    ..writeln()
+    ..writeln('## Transcrição')
+    ..writeln();
+  for (final p in paragraphs(segments)) {
+    buf
+      ..writeln('**[${clockLabel(p.start)}]** ${_escapeMarkdown(p.text)}')
+      ..writeln();
+  }
+  buf.writeln('---');
+  buf.writeln('*Gerado localmente por Fala que eu transcrevo!*');
+  return buf.toString();
+}
