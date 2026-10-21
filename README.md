@@ -132,3 +132,6 @@ plataforma. Roda em push de tag `v*` ou manualmente (workflow_dispatch).
 - Sem assinatura/notarização no macOS: na primeira abertura, use botão direito → Abrir.
 - Sem instaladores (dmg/msi/AppImage) ainda: os artefatos são a pasta do app compactada.
 - Arquivos sem trilha de áudio falham na etapa do ffmpeg (a mensagem de erro mostra o motivo).
+
+> O workflow ainda não rodou: o projeto não tem repositório remoto. Ao subir para o GitHub,
+> confira o primeiro run, principalmente o download do ffmpeg do macOS (fonte de terceiros).
