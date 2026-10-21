@@ -51,23 +51,4 @@ void main() {
     );
     expect(parseWhisperSegment('main: processing audio'), isNull);
   });
-
-  test('progresso geral combina extração e transcrição', () {
-    expect(
-      overallProgress(transcribing: false, stepFraction: 0.5),
-      closeTo(0.05, 1e-9),
-    );
-    expect(
-      overallProgress(transcribing: true, stepFraction: 0),
-      closeTo(0.1, 1e-9),
-    );
-    expect(
-      overallProgress(transcribing: true, stepFraction: 1),
-      closeTo(1, 1e-9),
-    );
-    expect(
-      overallProgress(transcribing: true, stepFraction: 2),
-      closeTo(1, 1e-9),
-    );
-  });
 }

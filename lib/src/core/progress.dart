@@ -46,16 +46,3 @@ Segment? parseWhisperSegment(String line) {
   );
   return Segment(start: t(1), end: t(5), text: m[9]!.trim());
 }
-
-/// Junta o progresso das duas etapas numa fração 0–1.
-/// A extração de áudio é rápida, então vale [extractWeight] do total.
-double overallProgress({
-  required bool transcribing,
-  required double stepFraction,
-  double extractWeight = 0.1,
-}) {
-  final f = stepFraction.clamp(0.0, 1.0);
-  return transcribing
-      ? extractWeight + f * (1 - extractWeight)
-      : f * extractWeight;
-}

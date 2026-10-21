@@ -6,8 +6,6 @@ import 'commands.dart';
 import 'progress.dart';
 import 'segment.dart';
 
-enum Stage { extracting, transcribing }
-
 class TranscriptionCancelled implements Exception {
   @override
   String toString() => 'Transcrição cancelada';
@@ -25,13 +23,20 @@ class TranscriptionFailed implements Exception {
 typedef ProcessStarter =
     Future<Process> Function(String executable, List<String> arguments);
 
-/// Pipeline: ffmpeg extrai o áudio → whisper-cli transcreve.
-/// Os dois rodam como processos filhos; o progresso vem do parse da saída.
+/// Duração e miniatura de um arquivo de vídeo.
+class MediaInfo {
+  const MediaInfo({this.duration, this.thumbnailPath});
+  final Duration? duration;
+  final String? thumbnailPath;
+}
+
+/// Executa ffmpeg e whisper-cli como processos filhos. Cada etapa é um método,
+/// para a tela poder intercalar o download do modelo entre elas. O progresso
+/// vem do parse da saída e é entregue como fração 0–1 da etapa.
 class Transcriber {
   Transcriber({
     required this.ffmpegPath,
     required this.whisperPath,
-    required this.tempDir,
     ProcessStarter? startProcess,
     int? processors,
   }) : _start =
@@ -41,68 +46,58 @@ class Transcriber {
 
   final String ffmpegPath;
   final String whisperPath;
-  final Directory tempDir;
   final ProcessStarter _start;
   final int _threads;
 
   Process? _current;
   bool _cancelled = false;
 
+  bool get cancelled => _cancelled;
+
   void cancel() {
     _cancelled = true;
     _current?.kill();
   }
 
-  Future<List<Segment>> run({
-    required String input,
-    required String modelPath,
-    required String language,
-    required void Function(Stage stage, double overall) onProgress,
-    void Function(Segment segment)? onSegment,
-  }) async {
-    _cancelled = false;
-    await tempDir.create(recursive: true);
-    final wav = File(
-      '${tempDir.path}${Platform.pathSeparator}audio_${DateTime.now().microsecondsSinceEpoch}.wav',
-    );
+  /// Lê a duração e extrai um quadro para [thumbnailPath]. Nunca lança:
+  /// sem ffmpeg ou sem vídeo, devolve o que conseguir.
+  Future<MediaInfo> probe(String input, String thumbnailPath) async {
+    Duration? duration;
     try {
-      final duration = await _extract(input, wav.path, onProgress);
-      return await _transcribe(
-        wav.path,
-        modelPath,
-        language,
-        duration,
-        onProgress,
-        onSegment,
+      final code = await _runProcess(
+        ffmpegPath,
+        ffmpegThumbnailArgs(input: input, output: thumbnailPath),
+        onStderr: (l) => duration ??= parseFfmpegDuration(l),
+        checkCancel: false,
       );
-    } finally {
-      if (await wav.exists()) await wav.delete();
+      final thumb = File(thumbnailPath);
+      return MediaInfo(
+        duration: duration,
+        thumbnailPath: code == 0 && thumb.existsSync() ? thumbnailPath : null,
+      );
+    } catch (_) {
+      return MediaInfo(duration: duration);
     }
   }
 
-  Future<Duration?> _extract(
+  /// Extrai o áudio em WAV 16 kHz mono. Devolve a duração do arquivo.
+  Future<Duration?> extractAudio(
     String input,
-    String output,
-    void Function(Stage, double) onProgress,
-  ) async {
+    String wavPath, {
+    required void Function(double fraction) onProgress,
+  }) async {
     Duration? duration;
     final tail = _Tail();
-    onProgress(Stage.extracting, 0);
     final code = await _runProcess(
       ffmpegPath,
-      ffmpegExtractArgs(input: input, output: output),
+      ffmpegExtractArgs(input: input, output: wavPath),
       onStderr: (line) {
         tail.add(line);
         duration ??= parseFfmpegDuration(line);
         final t = parseFfmpegTime(line);
-        if (t != null && duration != null && duration!.inMilliseconds > 0) {
-          onProgress(
-            Stage.extracting,
-            overallProgress(
-              transcribing: false,
-              stepFraction: t.inMilliseconds / duration!.inMilliseconds,
-            ),
-          );
+        final d = duration;
+        if (t != null && d != null && d.inMilliseconds > 0) {
+          onProgress(t.inMilliseconds / d.inMilliseconds);
         }
       },
     );
@@ -112,38 +107,33 @@ class Transcriber {
         tail.text,
       );
     }
+    onProgress(1);
     return duration;
   }
 
-  Future<List<Segment>> _transcribe(
-    String wav,
-    String model,
-    String language,
+  /// Transcreve o WAV. [onSegment] recebe cada trecho assim que sai.
+  Future<List<Segment>> transcribe(
+    String wavPath, {
+    required String modelPath,
+    required String language,
     Duration? duration,
-    void Function(Stage, double) onProgress,
-    void Function(Segment)? onSegment,
-  ) async {
+    required void Function(double fraction) onProgress,
+    void Function(Segment segment)? onSegment,
+  }) async {
     final segments = <Segment>[];
     final tail = _Tail();
     var fraction = 0.0;
     void report(double f) {
       if (f <= fraction) return;
       fraction = f;
-      onProgress(
-        Stage.transcribing,
-        overallProgress(transcribing: true, stepFraction: f),
-      );
+      onProgress(f);
     }
 
-    onProgress(
-      Stage.transcribing,
-      overallProgress(transcribing: true, stepFraction: 0),
-    );
     final code = await _runProcess(
       whisperPath,
       whisperArgs(
-        model: model,
-        audio: wav,
+        model: modelPath,
+        audio: wavPath,
         language: language,
         threads: _threads,
       ),
@@ -152,7 +142,7 @@ class Transcriber {
         if (s == null) return;
         segments.add(s);
         onSegment?.call(s);
-        // Fallback de progresso: posição do último segmento / duração.
+        // Fallback de progresso: posição do último trecho / duração.
         if (duration != null && duration.inMilliseconds > 0) {
           report(s.end.inMilliseconds / duration.inMilliseconds * 0.99);
         }
@@ -178,17 +168,30 @@ class Transcriber {
     List<String> args, {
     void Function(String line)? onStdout,
     void Function(String line)? onStderr,
+    bool checkCancel = true,
   }) async {
-    if (_cancelled) throw TranscriptionCancelled();
+    if (checkCancel && _cancelled) throw TranscriptionCancelled();
     final Process process;
     try {
       process = await _start(exe, args);
     } on ProcessException catch (e) {
       throw TranscriptionFailed('Não foi possível executar $exe', e.message);
     }
+    if (!checkCancel) return _drain(process, onStdout, onStderr);
     _current = process;
     // Cancelado enquanto o processo iniciava: mata agora.
     if (_cancelled) process.kill();
+    final code = await _drain(process, onStdout, onStderr);
+    _current = null;
+    if (_cancelled) throw TranscriptionCancelled();
+    return code;
+  }
+
+  Future<int> _drain(
+    Process process,
+    void Function(String line)? onStdout,
+    void Function(String line)? onStderr,
+  ) async {
     Stream<String> lines(Stream<List<int>> s) => s
         .transform(const Utf8Decoder(allowMalformed: true))
         .transform(const LineSplitter());
@@ -196,8 +199,6 @@ class Transcriber {
     final err = lines(process.stderr).forEach((l) => onStderr?.call(l));
     final code = await process.exitCode;
     await Future.wait([out, err]);
-    _current = null;
-    if (_cancelled) throw TranscriptionCancelled();
     return code;
   }
 }

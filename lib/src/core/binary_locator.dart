@@ -55,11 +55,21 @@ class BinaryLocator {
     final extra = switch (os) {
       'macos' => ['/opt/homebrew/bin', '/usr/local/bin'],
       'linux' => ['/usr/local/bin', '/usr/bin', '/snap/bin'],
+      'windows' => _windowsUserBinDirs,
       _ => <String>[],
     };
     final dirs = <String>[bundledBinDir, ...fromPath, ...extra];
     // Remove duplicados preservando a ordem.
     return {...dirs}.toList();
+  }
+
+  /// Onde o comando de instalação da Tela 2 extrai o whisper-cli no Windows
+  /// (o zip oficial pode trazer os arquivos dentro de `Release/`).
+  List<String> get _windowsUserBinDirs {
+    final local = environment['LOCALAPPDATA'];
+    if (local == null) return const [];
+    final dir = _p.join(local, 'FalaQueEuTranscrevo', 'bin');
+    return [dir, _p.join(dir, 'Release')];
   }
 
   /// Caminho completo do binário, ou `null` se não encontrado.

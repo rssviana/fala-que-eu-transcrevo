@@ -11,6 +11,46 @@ String srtTimestamp(Duration d) {
       '${_two(d.inSeconds.remainder(60))},$ms';
 }
 
+/// `HH:MM:SS.mmm`, o formato de tempo do WebVTT.
+String vttTimestamp(Duration d) => srtTimestamp(d).replaceFirst(',', '.');
+
+String toVtt(List<Segment> segments) {
+  final buf = StringBuffer('WEBVTT\n\n');
+  for (final s in segments) {
+    if (s.text.isEmpty) continue;
+    buf
+      ..writeln('${vttTimestamp(s.start)} --> ${vttTimestamp(s.end)}')
+      ..writeln(s.text)
+      ..writeln();
+  }
+  return buf.toString();
+}
+
+/// Palavras do texto corrido (sem anotações como `[MÚSICA]`).
+int wordCount(List<Segment> segments) => RegExp(
+  r"[\p{L}\p{N}][\p{L}\p{N}'’-]*",
+  unicode: true,
+).allMatches(toPlainText(segments)).length;
+
+/// `mm:ss`, ou `h:mm:ss` a partir de 1 hora. Usado na prévia, no resultado e
+/// na duração do vídeo.
+String timestampLabel(Duration d) {
+  final s = _two(d.inSeconds.remainder(60));
+  if (d.inHours > 0) {
+    return '${d.inHours}:${_two(d.inMinutes.remainder(60))}:$s';
+  }
+  return '${_two(d.inMinutes)}:$s';
+}
+
+/// Tempo gasto, curto: `25 s`, `7 min`, `1 h 05 min`.
+String elapsedLabel(Duration d) {
+  if (d.inSeconds < 60) return '${d.inSeconds} s';
+  if (d.inHours > 0) {
+    return '${d.inHours} h ${_two(d.inMinutes.remainder(60))} min';
+  }
+  return '${(d.inSeconds / 60).round()} min';
+}
+
 String toSrt(List<Segment> segments) {
   final buf = StringBuffer();
   var index = 1;

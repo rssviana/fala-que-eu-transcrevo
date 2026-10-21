@@ -6,14 +6,22 @@ class WhisperModel {
     required this.id,
     required this.label,
     required this.approxBytes,
-    required this.description,
+    required this.speed,
+    required this.accuracy,
+    this.recommended = false,
   });
 
   /// Nome usado no arquivo `ggml-<id>.bin` do repositório do whisper.cpp.
   final String id;
   final String label;
   final int approxBytes;
-  final String description;
+
+  /// Medidores de 0 a 5 mostrados no cartão do modelo.
+  final int speed;
+  final int accuracy;
+
+  /// Selo "Ideal".
+  final bool recommended;
 
   String get fileName => 'ggml-$id.bin';
 
@@ -31,71 +39,83 @@ const whisperModels = <WhisperModel>[
     id: 'tiny',
     label: 'Tiny',
     approxBytes: 75 * _mb,
-    description: 'Muito rápido, precisão baixa',
+    speed: 5,
+    accuracy: 1,
   ),
   WhisperModel(
     id: 'base',
     label: 'Base',
     approxBytes: 142 * _mb,
-    description: 'Rápido, bom para testes',
+    speed: 4,
+    accuracy: 2,
   ),
   WhisperModel(
     id: 'small',
     label: 'Small',
     approxBytes: 466 * _mb,
-    description: 'Equilíbrio entre velocidade e precisão',
+    speed: 3,
+    accuracy: 3,
+    recommended: true,
   ),
   WhisperModel(
     id: 'medium',
     label: 'Medium',
     approxBytes: 1533 * _mb,
-    description: 'Mais preciso, mais lento',
+    speed: 2,
+    accuracy: 4,
   ),
   WhisperModel(
-    id: 'large-v3-turbo-q5_0',
-    label: 'Large v3 Turbo (q5)',
-    approxBytes: 547 * _mb,
-    description: 'Ótima precisão, compacto',
-  ),
-  WhisperModel(
-    id: 'large-v3-turbo',
-    label: 'Large v3 Turbo',
-    approxBytes: 1624 * _mb,
-    description: 'Melhor precisão, arquivo grande',
+    id: 'large-v3',
+    label: 'Large',
+    approxBytes: 2970 * _mb,
+    speed: 1,
+    accuracy: 5,
   ),
 ];
 
 const defaultModelId = 'small';
 
-WhisperModel modelById(String id) =>
-    whisperModels.firstWhere((m) => m.id == id, orElse: () => whisperModels[1]);
+WhisperModel modelById(String id) => whisperModels.firstWhere(
+  (m) => m.id == id,
+  orElse: () => modelById(defaultModelId),
+);
 
 class Language {
-  const Language(this.code, this.label);
+  const Language(this.code, this.label, this.shortLabel);
 
   /// Código mostrado/salvo pela UI (ex.: `pt-BR`, `auto`).
   final String code;
   final String label;
 
+  /// Versão curta para a linha de detalhes do arquivo.
+  final String shortLabel;
+
   /// Código aceito pelo whisper-cli (`-l`): ele usa ISO 639-1 sem região.
   String get whisperCode => code == 'auto' ? 'auto' : code.split('-').first;
 }
 
+/// Os quatro primeiros seguem a ordem do design; os demais vêm depois.
 const languages = <Language>[
-  Language('pt-BR', 'Português (Brasil)'),
-  Language('auto', 'Detectar automaticamente'),
-  Language('en', 'Inglês'),
-  Language('es', 'Espanhol'),
-  Language('fr', 'Francês'),
-  Language('it', 'Italiano'),
-  Language('de', 'Alemão'),
-  Language('ja', 'Japonês'),
+  Language('pt-BR', 'Português (Brasil)', 'Português'),
+  Language('auto', 'Detectar automaticamente', 'Automático'),
+  Language('en', 'Inglês', 'Inglês'),
+  Language('es', 'Espanhol', 'Espanhol'),
+  Language('fr', 'Francês', 'Francês'),
+  Language('it', 'Italiano', 'Italiano'),
+  Language('de', 'Alemão', 'Alemão'),
+  Language('ja', 'Japonês', 'Japonês'),
 ];
 
 const defaultLanguageCode = 'pt-BR';
 
+Language languageByCode(String code) =>
+    languages.firstWhere((l) => l.code == code, orElse: () => languages.first);
+
+/// Chips mostrados no dropzone.
+const featuredFormats = ['MP4', 'MOV', 'MKV', 'WEBM', 'MP3', 'WAV'];
+
 const videoExtensions = <String>[
-  'mp4', 'mov', 'mkv', 'webm', 'avi', 'm4v', 'flv', 'wmv', 'mpg', 'mpeg',
+  'mp4', 'mov', 'mkv', 'webm', 'avi', 'm4v', 'flv', 'wmv', 'mpg', 'mpeg', //
   'ts', '3gp',
   // Áudio também funciona, já que o ffmpeg só extrai a trilha.
   'mp3', 'm4a', 'wav', 'ogg', 'flac',
@@ -114,4 +134,15 @@ String formatBytes(int bytes) {
   if (bytes >= _mb) return '${(bytes / _mb).round()} MB';
   if (bytes >= 1024) return '${(bytes / 1024).round()} KB';
   return '$bytes B';
+}
+
+/// Milhar com ponto: 6840 → `6.840`.
+String formatThousands(int n) {
+  final s = n.abs().toString();
+  final buf = StringBuffer(n < 0 ? '-' : '');
+  for (var i = 0; i < s.length; i++) {
+    if (i > 0 && (s.length - i) % 3 == 0) buf.write('.');
+    buf.write(s[i]);
+  }
+  return buf.toString();
 }

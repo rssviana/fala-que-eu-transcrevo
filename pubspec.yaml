@@ -42,6 +42,10 @@ dependencies:
   # Só para travar a versão: o image 4.11 (dependência do pdf) chama
   # ZLibDecoder.decodeLazy, que não existe no archive <4.1 exigido pelo pdf 3.12.
   image: ">=4.5.0 <4.11.0"
+  flutter_svg: ^2.3.0
+  url_launcher: ^6.3.2
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -65,10 +69,38 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # Fonte embutida no PDF (com acentuação). Licença: assets/fonts/OFL.txt
+  # Noto Sans: fonte embutida no PDF (com acentuação).
   assets:
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
+
+  # Fontes da interface, embutidas (o app é offline). Licenças OFL em
+  # assets/fonts/*-OFL.txt. São fontes variáveis: o mesmo arquivo é declarado
+  # em cada peso para o Flutter não engrossar a letra artificialmente; o peso
+  # real vem de FontVariation em lib/theme/app_text.dart.
+  fonts:
+    - family: Bricolage
+      fonts:
+        - asset: assets/fonts/BricolageGrotesque.ttf
+          weight: 500
+        - asset: assets/fonts/BricolageGrotesque.ttf
+          weight: 700
+        - asset: assets/fonts/BricolageGrotesque.ttf
+          weight: 800
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
+          weight: 400
+        - asset: assets/fonts/Inter.ttf
+          weight: 500
+        - asset: assets/fonts/Inter.ttf
+          weight: 600
+        - asset: assets/fonts/Inter.ttf
+          weight: 700
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
+          weight: 500
 
   # To add assets to your application, add an assets section, like this:
   # assets:

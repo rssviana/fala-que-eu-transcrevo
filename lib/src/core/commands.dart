@@ -21,6 +21,27 @@ List<String> ffmpegExtractArgs({
   output,
 ];
 
+/// Extrai um quadro do vídeo (para a miniatura) e, de quebra, imprime a linha
+/// "Duration:" no stderr. Falha sem problema em arquivos só de áudio.
+List<String> ffmpegThumbnailArgs({
+  required String input,
+  required String output,
+  int width = 152,
+}) => [
+  '-hide_banner',
+  '-nostdin',
+  '-y',
+  '-ss',
+  '1',
+  '-i',
+  input,
+  '-frames:v',
+  '1',
+  '-vf',
+  'scale=$width:-2',
+  output,
+];
+
 List<String> whisperArgs({
   required String model,
   required String audio,

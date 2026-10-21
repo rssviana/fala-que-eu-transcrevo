@@ -187,6 +187,15 @@ Win32Window::MessageHandler(HWND hwnd,
       }
       return 0;
 
+    case WM_GETMINMAXINFO: {
+      // Tamanho mínimo do design: 720 × 600 (pixels lógicos).
+      auto info = reinterpret_cast<MINMAXINFO*>(lparam);
+      double scale = FlutterDesktopGetDpiForHWND(hwnd) / 96.0;
+      info->ptMinTrackSize.x = static_cast<LONG>(720 * scale);
+      info->ptMinTrackSize.y = static_cast<LONG>(600 * scale);
+      return 0;
+    }
+
     case WM_DPICHANGED: {
       auto newRectSize = reinterpret_cast<RECT*>(lparam);
       LONG newWidth = newRectSize->right - newRectSize->left;

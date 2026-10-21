@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referência visual · Fala que eu transcrevo!</title>
+<!--
+  REFERÊNCIA VISUAL das 4 telas do app "Fala que eu transcrevo!".
+  Abra no navegador. Cada tela fica dentro de uma moldura de 1120 × 780 (tamanho padrão da janela).
+  Todos os valores (cores, tamanhos, raios, espaçamentos) estão nos tokens em :root e nas classes abaixo.
+  O HANDOFF.md explica o comportamento e como mapear isto para Flutter.
+  As fontes aqui vêm do Google Fonts só para visualizar; no app, embuta os arquivos de fonte.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================== TOKENS ============================== */
+:root{
+  /* superfícies */
+  --bg:#0C0E13;
+  --surface:#14171E;
+  --surface-sunken:#11141A;
+  --surface-raised:#1B1F28;
+  --surface-code:#0F1217;
+  --surface-hover-row:#1A1E26;
+  --icon-tile:#1E232D;
+  --track:#232834;
+  /* bordas */
+  --border:#262B36;
+  --border-subtle:#222731;
+  --border-header:#1E222B;
+  --border-strong:#343B48;
+  --border-button:#2C323D;
+  /* texto */
+  --text:#ECEEF2;
+  --text-body:#DDE1E7;
+  --text-strong-muted:#C9CED8;
+  --text-muted:#A1A8B5;
+  --text-faint:#8B93A1;
+  /* accent (coral). Alternativas: #7C9CFF, #5EEAD4, #FACC15 */
+  --accent:#FF7A55;
+  --on-accent:#1A0B05;
+  --accent-text:#FF9B7D;
+  --accent-text-hover:#FFC2AE;
+  --accent-soft-text:#FFB59E;
+  --accent-selected-bg:#1E1712;
+  --accent-ring:rgba(255,122,85,0.10);
+  --accent-card-bg:#1A1410;
+  --accent-card-border:#3A2A20;
+  --accent-chip-bg:#241914;
+  /* status */
+  --success:#4ADE80;
+  --success-text:#86EFAC;
+  --success-bg:#14231A;
+  --warning:#FBBF24;
+  --warning-text:#FCD34D;
+  --warning-bg:#2A2212;
+  /* decorativos */
+  --wave-idle:#3A4150;
+  --meter-off:#2C323D;
+  --meter-speed-on:#CBD2DC;
+  /* fontes */
+  --font-display:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-ui:Inter,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+
+/* ============================== PÁGINA DE REFERÊNCIA (não faz parte do app) ============================== */
+*{box-sizing:border-box}
+html,body{margin:0;background:#07080B;color:var(--text);font-family:var(--font-ui)}
+.ref-page{padding:48px 24px 96px;display:flex;flex-direction:column;align-items:center;gap:64px}
+.ref-intro{max-width:1120px;width:100%;display:flex;flex-direction:column;gap:8px}
+.ref-intro h1{margin:0;font-family:var(--font-display);font-size:40px;font-weight:800;letter-spacing:-0.02em}
+.ref-intro p{margin:0;color:var(--text-muted);font-size:15px;line-height:1.6}
+.ref-screen{width:100%;max-width:1120px;display:flex;flex-direction:column;gap:12px}
+.ref-label{font-family:var(--font-mono);font-size:13px;color:var(--text-muted)}
+.ref-label b{color:var(--text);font-weight:500}
+.window{width:100%;min-height:780px;border-radius:12px;overflow:hidden;border:1px solid #2A2F3A;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+
+/* ============================== APP ============================== */
+.app{min-height:780px;background:var(--bg);color:var(--text);font-family:var(--font-ui);display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent-text)} a:hover{color:var(--accent-text-hover)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+svg.icon{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ---------- Header ---------- */
+.header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:18px 32px;border-bottom:1px solid var(--border-header)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center}
+.brand-text{display:flex;flex-direction:column;gap:2px}
+.brand-name{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-0.01em}
+.brand-sub{font-size:12.5px;color:var(--text-muted)}
+.header-actions{display:flex;align-items:center;gap:10px}
+
+/* ---------- Pill de status ---------- */
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:500}
+.pill .dot{width:8px;height:8px;border-radius:50%}
+.pill--ok{background:var(--success-bg);color:var(--success-text)} .pill--ok .dot{background:var(--success)}
+.pill--warn{background:var(--warning-bg);color:var(--warning-text)} .pill--warn .dot{background:var(--warning)}
+
+/* ---------- Botões ---------- */
+.btn-icon{width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text-strong-muted);display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+.btn-secondary{height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text-strong-muted);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:8px;transition:border-color .15s}
+.btn-icon:hover,.btn-secondary:hover,.model:hover,.export:hover{border-color:var(--border-strong)}
+.btn-primary{height:50px;padding:0 24px;border-radius:14px;border:0;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:filter .15s}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-primary:disabled{opacity:.45;cursor:default;filter:none}
+
+/* ---------- Layout ---------- */
+.main{width:100%;margin:0 auto;padding:28px 32px 32px}
+.section-label{font-size:13px;font-weight:600;color:var(--text-strong-muted);letter-spacing:.02em}
+.hint{font-size:13px;color:var(--text-faint);line-height:1.5}
+.card{border:1px solid var(--border);border-radius:18px;background:var(--surface)}
+
+/* ================= TELA 1 · INÍCIO ================= */
+.home{max-width:1040px;display:flex;flex-direction:column;gap:22px}
+.dropzone{width:100%;border:1.5px dashed var(--border-strong);border-radius:22px;background:var(--surface-sunken);padding:44px 24px 40px;display:flex;flex-direction:column;align-items:center;gap:18px;transition:border-color .15s,background .15s}
+.dropzone.is-dragging{border-style:solid;border-color:var(--accent);background:var(--accent-selected-bg)}
+.wave{display:flex;align-items:center;gap:5px;height:64px}
+.wave span{display:block;width:5px;border-radius:3px;background:var(--wave-idle)}
+.wave span.on{background:var(--accent)}
+.dz-title{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing:-0.02em}
+.dz-sub{font-size:15px;color:var(--text-muted)}
+.dz-sub u{color:var(--accent-text);text-underline-offset:3px}
+.formats{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:4px}
+.format{font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);border:1px solid var(--border);border-radius:6px;padding:4px 8px}
+
+.options{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.opt-lang{flex:1 1 240px;display:flex;flex-direction:column;gap:10px}
+.select-wrap{position:relative}
+.select{width:100%;height:52px;appearance:none;-webkit-appearance:none;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 15px var(--font-ui);padding:0 44px 0 16px;cursor:pointer}
+.select-wrap svg{position:absolute;right:16px;top:17px;pointer-events:none;color:var(--text-muted)}
+.opt-lang .hint{font-size:12.5px}
+.opt-model{flex:999 1 560px;min-width:0;border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.opt-model legend{padding:0;margin-bottom:10px}
+.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.model{display:flex;flex-direction:column;align-items:flex-start;gap:12px;text-align:left;padding:14px;border-radius:14px;background:var(--surface);border:1.5px solid var(--border);color:var(--text);transition:border-color .15s,box-shadow .15s,background .15s}
+.model[aria-pressed="true"]{background:var(--accent-selected-bg);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-ring)}
+.model-top{display:flex;justify-content:space-between;align-items:center;gap:6px;width:100%}
+.model-name{font-family:var(--font-display);font-weight:700;font-size:16px}
+.model-badge{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-soft-text)}
+.meters{display:flex;flex-direction:column;gap:6px;width:100%}
+.meter{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--text-muted)}
+.dots{display:flex;gap:3px}
+.dots i{display:block;width:7px;height:7px;border-radius:2px;background:var(--meter-off)}
+.meter--speed .dots i.on{background:var(--meter-speed-on)}
+.meter--acc .dots i.on{background:var(--accent)}
+.model-size{font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint)}
+.model-size.have{color:var(--success-text)}
+
+.home-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;border-top:1px solid var(--border-header)}
+.privacy{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted)}
+.privacy svg{color:var(--success-text)}
+.footer-cta{display:flex;align-items:center;gap:14px}
+.home-footer .btn-primary{padding:0 26px;font-size:15.5px}
+
+/* ================= TELA 2 · SETUP ================= */
+.setup{max-width:760px;padding:36px 32px 40px;display:flex;flex-direction:column;gap:24px}
+.setup-head{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-soft-text)}
+.setup h1{margin:0;font-family:var(--font-display);font-weight:800;font-size:34px;line-height:1.1;letter-spacing:-0.02em}
+.lead{margin:0;font-size:15.5px;line-height:1.6;color:var(--text-muted)}
+.checklist{overflow:hidden}
+.dep{display:flex;align-items:center;gap:14px;padding:18px 20px}
+.dep + .dep{border-top:1px solid var(--border-subtle)}
+.dep-icon{width:40px;height:40px;border-radius:10px;background:var(--icon-tile);color:var(--text-strong-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dep-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.dep-name{font-family:var(--font-mono);font-size:14.5px}
+.dep-desc{font-size:13px;color:var(--text-muted)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;border-radius:999px;padding:5px 10px}
+.badge--warn{color:var(--warning-text);background:var(--warning-bg)}
+.badge--ok{color:var(--success-text);background:var(--success-bg)}
+.install{display:flex;flex-direction:column;gap:12px}
+.install-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.install-head .section-label{font-size:14px;letter-spacing:0}
+.tabs{display:inline-flex;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.tab{height:36px;padding:0 14px;border-radius:9px;border:0;background:transparent;color:var(--text-muted);font-size:13px;font-weight:600}
+.tab[aria-selected="true"]{background:var(--border);color:var(--text)}
+.cmds{display:flex;flex-direction:column;gap:8px}
+.cmd{display:flex;align-items:center;gap:12px;background:var(--surface-code);border:1px solid var(--border);border-radius:12px;padding:6px 6px 6px 16px}
+.cmd-prompt{font-family:var(--font-mono);font-size:13.5px;color:var(--text-faint)}
+.cmd code{flex:1;min-width:0;font-family:var(--font-mono);font-size:13.5px;color:var(--text);overflow-x:auto;white-space:nowrap}
+.btn-copy{height:44px;padding:0 14px;border-radius:9px;border:1px solid var(--border-button);background:var(--surface-raised);color:var(--text-strong-muted);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.setup-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding-top:8px}
+.link-outline{height:50px;padding:0 18px;border-radius:14px;display:inline-flex;align-items:center;font-size:14px;font-weight:500;color:var(--text-strong-muted);text-decoration:none;border:1px solid var(--border)}
+.link-outline:hover{color:var(--text);border-color:var(--border-strong)}
+
+/* ================= TELA 3 · TRANSCREVENDO ================= */
+.progress-screen{max-width:1080px;display:flex;flex-wrap:wrap;gap:24px;align-items:stretch}
+.col-left{flex:1 1 320px;display:flex;flex-direction:column;gap:18px}
+.file-card{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--border);border-radius:16px;background:var(--surface)}
+.thumb{width:76px;height:52px;border-radius:10px;background:var(--track);color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.file-info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.file-name{font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-meta{font-family:var(--font-mono);font-size:12px;color:var(--text-muted)}
+.progress-card{display:flex;flex-direction:column;gap:12px;padding:22px}
+.progress-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.percent{font-family:var(--font-display);font-weight:800;font-size:56px;line-height:1;letter-spacing:-0.03em}
+.percent small{font-size:28px;color:var(--text-muted)}
+.eta{font-size:13px;color:var(--text-muted)}
+.bar{height:10px;border-radius:999px;background:var(--track);overflow:hidden}
+.bar > div{height:100%;border-radius:999px;background:var(--accent);transition:width .3s ease}
+.steps{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.step{display:flex;align-items:center;gap:12px;font-size:14px}
+.step-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step--done{color:var(--text-muted)} .step--done .step-icon{background:var(--success-bg);color:var(--success-text)}
+.step--current{color:var(--text);font-weight:600} .step--current .step-icon{border:2px solid var(--accent)}
+.step--current .step-icon span{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 1.4s ease-in-out infinite}
+.step--todo{color:var(--text-faint)} .step--todo .step-icon{border:2px solid var(--border-strong)}
+@keyframes pulse{50%{opacity:.35}}
+.live{flex:999 1 480px;min-width:0;display:flex;flex-direction:column;border:1px solid var(--border);border-radius:18px;background:var(--surface-sunken);overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-subtle)}
+.panel-title{font-size:14px;font-weight:600}
+.writing{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--accent-soft-text)}
+.writing i{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.live-body{flex:1;padding:20px;display:flex;flex-direction:column;gap:18px}
+.line{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:baseline}
+.ts{font-family:var(--font-mono);font-size:12px;color:var(--text-faint)}
+.line-text{font-size:15.5px;line-height:1.6}
+.line--old .line-text{color:var(--text-faint)}
+.line--recent .line-text{color:var(--text-strong-muted)}
+.line--writing .line-text{color:var(--text)}
+.caret{display:inline-block;width:2px;height:18px;margin-left:3px;vertical-align:-3px;background:var(--accent);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ================= TELA 4 · RESULTADO ================= */
+.result{max-width:1120px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.transcript{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;border:1px solid var(--border);border-radius:18px;background:var(--surface-sunken);overflow:hidden}
+.transcript-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 14px 20px;border-bottom:1px solid var(--border-subtle)}
+.transcript-title{display:flex;flex-direction:column;gap:3px;min-width:0}
+.transcript-title b{font-weight:600;font-size:15px}
+.transcript-title span{font-size:12.5px;color:var(--text-muted)}
+.search{position:relative;flex:0 1 240px}
+.search svg{position:absolute;left:14px;top:14px;color:var(--text-faint)}
+.search input{width:100%;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:400 14px var(--font-ui);padding:0 14px 0 38px}
+.search input::placeholder{color:var(--text-faint)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.segments{padding:10px 8px 16px;display:flex;flex-direction:column}
+.seg{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;padding:10px 12px;border-radius:12px;transition:background .15s}
+.seg:hover,.seg.is-active{background:var(--surface-hover-row)}
+.seg .ts{color:var(--accent-soft-text);padding-top:3px}
+.seg-text{font-size:15.5px;line-height:1.65;color:var(--text-body)}
+.side{flex:1 1 300px;display:flex;flex-direction:column;gap:16px}
+.done-card{display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:18px;background:var(--accent-card-bg);border:1px solid var(--accent-card-border)}
+.done-icon{width:44px;height:44px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center}
+.done-title{font-family:var(--font-display);font-weight:800;font-size:26px;letter-spacing:-0.02em;line-height:1.15}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font-family:var(--font-mono);font-weight:500;font-size:15px}
+.stat span{font-size:12px;color:var(--text-muted)}
+.side .btn-primary{height:52px;width:100%}
+.exports{display:flex;flex-direction:column;gap:8px}
+.export{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-align:left;transition:border-color .15s}
+.ext{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--accent-soft-text);background:var(--accent-chip-bg);border-radius:7px;padding:5px 8px;min-width:34px;text-align:center}
+.export-text{flex:1;display:flex;flex-direction:column;gap:2px}
+.export-text b{font-size:14px;font-weight:600}
+.export-text span{font-size:12.5px;color:var(--text-muted)}
+.export svg{color:var(--text-muted)}
+
+/* ---------- Responsivo ---------- */
+@media (max-width:640px){
+  .header{padding:16px 20px}
+  .main,.setup{padding-left:20px;padding-right:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="ref-page">
+
+<div class="ref-intro">
+  <h1>Fala que eu transcrevo!</h1>
+  <p>Referência visual das 4 telas. Tema escuro, accent coral <code>#FF7A55</code>. Fontes: Bricolage Grotesque (display), Inter (interface), JetBrains Mono (mono). Os cartões de modelo (tela 1) e as abas de sistema (tela 2) são clicáveis.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- TELA 1 · INÍCIO                                               -->
+<!-- ============================================================ -->
+<section class="ref-screen" id="tela-1">
+<div class="ref-label"><b>Tela 1 · Início</b> — app pronto, nenhum vídeo escolhido</div>
+<div class="window"><div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Fala que eu transcrevo!</span>
+        <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="pill pill--ok"><span class="dot"></span>Tudo pronto</span>
+      <button class="btn-icon" aria-label="Histórico">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+      </button>
+      <button class="btn-icon" aria-label="Configurações">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path d="M4 7h10"/><path d="M18 7h2"/><circle cx="16" cy="7" r="2"/><path d="M4 17h2"/><path d="M10 17h10"/><circle cx="8" cy="17" r="2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main home">
+    <!-- Dropzone: clique abre seletor; aceita arrastar e soltar. Classe .is-dragging = estado arrastando -->
+    <button class="dropzone" id="dropzone">
+      <!-- 28 barras; alturas fixas; índices 9–19 em accent (.on) -->
+      <div class="wave" aria-hidden="true">
+        <span style="height:14px"></span><span style="height:22px"></span><span style="height:34px"></span><span style="height:26px"></span><span style="height:46px"></span><span style="height:58px"></span><span style="height:40px"></span><span style="height:28px"></span><span style="height:18px"></span><span class="on" style="height:30px"></span><span class="on" style="height:52px"></span><span class="on" style="height:64px"></span><span class="on" style="height:48px"></span><span class="on" style="height:36px"></span><span class="on" style="height:24px"></span><span class="on" style="height:40px"></span><span class="on" style="height:56px"></span><span class="on" style="height:44px"></span><span class="on" style="height:30px"></span><span class="on" style="height:20px"></span><span style="height:34px"></span><span style="height:50px"></span><span style="height:38px"></span><span style="height:26px"></span><span style="height:16px"></span><span style="height:24px"></span><span style="height:18px"></span><span style="height:12px"></span>
+      </div>
+      <span class="dz-title">Solte seu vídeo aqui</span>
+      <span class="dz-sub">ou <u>escolha um arquivo</u> no computador</span>
+      <div class="formats">
+        <span class="format">MP4</span><span class="format">MOV</span><span class="format">MKV</span><span class="format">WEBM</span><span class="format">MP3</span><span class="format">WAV</span>
+      </div>
+    </button>
+
+    <section class="options">
+      <div class="opt-lang">
+        <label class="section-label" for="idioma">Idioma do vídeo</label>
+        <div class="select-wrap">
+          <select class="select" id="idioma">
+            <option>Português (Brasil)</option>
+            <option>Detectar automaticamente</option>
+            <option>Inglês</option>
+            <option>Espanhol</option>
+          </select>
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <span class="hint">Escolher o idioma certo deixa a transcrição mais precisa.</span>
+      </div>
+
+      <fieldset class="opt-model">
+        <legend class="section-label">Qualidade da transcrição</legend>
+        <div class="models" id="models">
+          <!-- data-speed / data-acc = pontinhos acesos (0–5). .have = modelo já baixado -->
+          <button class="model" aria-pressed="false">
+            <span class="model-top"><span class="model-name">Tiny</span></span>
+            <span class="meters">
+              <span class="meter meter--speed">Rapidez<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span>
+              <span class="meter meter--acc">Precisão<span class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></span></span>
+            </span>
+            <span class="model-size have">✓ Já baixado · 75 MB</span>
+          </button>
+          <button class="model" aria-pressed="false">
+            <span class="model-top"><span class="model-name">Base</span></span>
+            <span class="meters">
+              <span class="meter meter--speed">Rapidez<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span>
+              <span class="meter meter--acc">Precisão<span class="dots"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></span>
+            </span>
+            <span class="model-size have">✓ Já baixado · 142 MB</span>
+          </button>
+          <button class="model" aria-pressed="true">
+            <span class="model-top"><span class="model-name">Small</span><span class="model-badge">Ideal</span></span>
+            <span class="meters">
+              <span class="meter meter--speed">Rapidez<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span>
+              <span class="meter meter--acc">Precisão<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></span>
+            </span>
+            <span class="model-size">Baixar · 466 MB</span>
+          </button>
+          <button class="model" aria-pressed="false">
+            <span class="model-top"><span class="model-name">Medium</span></span>
+            <span class="meters">
+              <span class="meter meter--speed">Rapidez<span class="dots"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></span>
+              <span class="meter meter--acc">Precisão<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></span>
+            </span>
+            <span class="model-size">Baixar · 1,5 GB</span>
+          </button>
+          <button class="model" aria-pressed="false">
+            <span class="model-top"><span class="model-name">Large</span></span>
+            <span class="meters">
+              <span class="meter meter--speed">Rapidez<span class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></span></span>
+              <span class="meter meter--acc">Precisão<span class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span>
+            </span>
+            <span class="model-size">Baixar · 2,9 GB</span>
+          </button>
+        </div>
+      </fieldset>
+    </section>
+
+    <footer class="home-footer">
+      <span class="privacy">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        Tudo acontece no seu computador. Nenhum arquivo é enviado para a internet.
+      </span>
+      <div class="footer-cta">
+        <span class="hint">Escolha um vídeo para começar</span>
+        <button class="btn-primary" disabled>
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h7"/><path d="m16 15 3 3 3-3"/></svg>
+          Transcrever
+        </button>
+      </div>
+    </footer>
+  </main>
+
+</div></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TELA 2 · PRIMEIRA EXECUÇÃO (dependências faltando)            -->
+<!-- ============================================================ -->
+<section class="ref-screen" id="tela-2">
+<div class="ref-label"><b>Tela 2 · Primeira execução</b> — ffmpeg e whisper-cli não encontrados (substitui o antigo banner vermelho)</div>
+<div class="window"><div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Fala que eu transcrevo!</span>
+        <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
+      </div>
+    </div>
+    <span class="pill pill--warn"><span class="dot"></span>Configuração pendente</span>
+  </header>
+
+  <main class="main setup">
+    <div class="setup-head">
+      <span class="eyebrow">Primeira vez por aqui</span>
+      <h1>Falta só um passo para começar</h1>
+      <p class="lead">O app usa duas ferramentas gratuitas que rodam direto no seu computador. Elas ainda não foram encontradas.</p>
+    </div>
+
+    <div class="card checklist">
+      <div class="dep">
+        <div class="dep-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14"/><path d="M17 5v14"/><path d="M3 12h18"/></svg></div>
+        <div class="dep-text"><span class="dep-name">ffmpeg</span><span class="dep-desc">Separa o áudio do vídeo</span></div>
+        <span class="badge badge--warn"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>Não encontrado</span>
+      </div>
+      <div class="dep">
+        <div class="dep-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></div>
+        <div class="dep-text"><span class="dep-name">whisper-cli</span><span class="dep-desc">Transforma a fala em texto</span></div>
+        <span class="badge badge--warn"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>Não encontrado</span>
+      </div>
+      <!-- Variante "Encontrado" (quando só uma falta):
+      <span class="badge badge--ok"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6"><path d="m5 12 5 5 9-10"/></svg>Encontrado</span>
+      -->
+    </div>
+
+    <div class="install">
+      <div class="install-head">
+        <span class="section-label">Instale pelo terminal</span>
+        <div class="tabs" role="tablist" aria-label="Sistema operacional" id="os-tabs">
+          <button class="tab" role="tab" aria-selected="true" data-os="mac">macOS</button>
+          <button class="tab" role="tab" aria-selected="false" data-os="win">Windows</button>
+          <button class="tab" role="tab" aria-selected="false" data-os="linux">Linux</button>
+        </div>
+      </div>
+      <div class="cmds" id="cmds"><!-- preenchido pelo script abaixo --></div>
+      <span class="hint" id="os-note"></span>
+    </div>
+
+    <div class="setup-actions">
+      <button class="btn-primary">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+        Já instalei, verificar de novo
+      </button>
+      <a class="link-outline" href="https://github.com/ggml-org/whisper.cpp">Preciso de ajuda</a>
+    </div>
+  </main>
+
+</div></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TELA 3 · TRANSCREVENDO                                        -->
+<!-- ============================================================ -->
+<section class="ref-screen" id="tela-3">
+<div class="ref-label"><b>Tela 3 · Transcrevendo</b> — dados de exemplo</div>
+<div class="window"><div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Fala que eu transcrevo!</span>
+        <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
+      </div>
+    </div>
+    <button class="btn-secondary">
+      <svg class="icon" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+      Cancelar
+    </button>
+  </header>
+
+  <main class="main progress-screen">
+    <section class="col-left">
+      <div class="file-card">
+        <div class="thumb"><svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg></div>
+        <div class="file-info">
+          <span class="file-name">reuniao-de-planejamento.mp4</span>
+          <span class="file-meta">48:12 · 612 MB · Português</span>
+        </div>
+      </div>
+
+      <div class="card progress-card">
+        <div class="progress-top">
+          <span class="percent">62<small>%</small></span>
+          <span class="eta">cerca de 3 min restantes</span>
+        </div>
+        <div class="bar" role="progressbar" aria-label="Progresso da transcrição" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"><div style="width:62%"></div></div>
+        <ol class="steps">
+          <li class="step step--done"><span class="step-icon"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>Áudio separado do vídeo</li>
+          <li class="step step--done"><span class="step-icon"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>Modelo Small pronto</li>
+          <li class="step step--current"><span class="step-icon"><span></span></span>Transcrevendo a fala</li>
+          <li class="step step--todo"><span class="step-icon"></span>Texto pronto para exportar</li>
+        </ol>
+      </div>
+      <span class="hint">Pode minimizar a janela. A gente avisa quando terminar.</span>
+    </section>
+
+    <section class="live" aria-label="Prévia ao vivo">
+      <div class="panel-head">
+        <span class="panel-title">Prévia ao vivo</span>
+        <span class="writing"><i></i>escrevendo…</span>
+      </div>
+      <div class="live-body">
+        <div class="line line--old"><span class="ts">29:02</span><span class="line-text">Então, retomando o que ficou da semana passada.</span></div>
+        <div class="line line--old"><span class="ts">29:09</span><span class="line-text">A parte de exportação já está quase pronta, faltam só os testes.</span></div>
+        <div class="line line--recent"><span class="ts">29:20</span><span class="line-text">O que ainda preocupa é o tempo de processamento em vídeos longos.</span></div>
+        <div class="line line--recent"><span class="ts">29:34</span><span class="line-text">Dá para usar um modelo menor como padrão e deixar o maior como opção.</span></div>
+        <div class="line line--recent"><span class="ts">29:44</span><span class="line-text">Faz sentido. Vou levantar os números até quinta</span></div>
+        <div class="line line--writing"><span class="ts">29:51</span><span class="line-text">e aí a gente decide se entra nessa sprint<span class="caret"></span></span></div>
+      </div>
+    </section>
+  </main>
+
+</div></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TELA 4 · RESULTADO                                            -->
+<!-- ============================================================ -->
+<section class="ref-screen" id="tela-4">
+<div class="ref-label"><b>Tela 4 · Resultado</b> — dados de exemplo; trecho 00:15 em hover</div>
+<div class="window"><div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">
+        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4A1.5 1.5 0 0 1 4 14.5z"/><path d="M9 8v4"/><path d="M12 6.5v7"/><path d="M15 9v2"/></svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Fala que eu transcrevo!</span>
+        <span class="brand-sub">Vídeo vira texto, sem sair do seu computador</span>
+      </div>
+    </div>
+    <button class="btn-secondary" style="color:var(--text);font-weight:600">
+      <svg class="icon" width="16" height="16" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Nova transcrição
+    </button>
+  </header>
+
+  <main class="main result">
+    <section class="transcript" aria-label="Transcrição">
+      <div class="transcript-head">
+        <div class="transcript-title">
+          <b>reuniao-de-planejamento.mp4</b>
+          <span>Clique em um trecho para editar</span>
+        </div>
+        <div class="search">
+          <label class="sr-only" for="busca">Buscar na transcrição</label>
+          <svg class="icon" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="busca" placeholder="Buscar no texto">
+        </div>
+      </div>
+      <div class="segments">
+        <div class="seg"><span class="ts">00:00</span><span class="seg-text">Bom dia, pessoal. Vamos começar que a pauta de hoje está cheia.</span></div>
+        <div class="seg"><span class="ts">00:07</span><span class="seg-text">Primeiro ponto é o lançamento do app para Windows e Linux.</span></div>
+        <div class="seg is-active"><span class="ts">00:15</span><span class="seg-text">No Mac já está tudo funcionando, inclusive a instalação das dependências.</span></div>
+        <div class="seg"><span class="ts">00:26</span><span class="seg-text">No Windows ainda falta assinar o instalador e testar em máquinas mais antigas.</span></div>
+        <div class="seg"><span class="ts">00:39</span><span class="seg-text">Linux a ideia é sair com AppImage primeiro e depois ver os outros formatos.</span></div>
+        <div class="seg"><span class="ts">00:51</span><span class="seg-text">Alguém tem algum bloqueio que precisa resolver antes disso?</span></div>
+        <div class="seg"><span class="ts">00:58</span><span class="seg-text">Só a parte de legendas, que eu quero revisar o tempo das quebras.</span></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="done-card">
+        <div class="done-icon"><svg class="icon" width="22" height="22" viewBox="0 0 24 24" stroke-width="2.6" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></div>
+        <span class="done-title">Pronto! Seu texto está aqui.</span>
+        <div class="stats">
+          <div class="stat"><b>48:12</b><span>de vídeo</span></div>
+          <div class="stat"><b>6.840</b><span>palavras</span></div>
+          <div class="stat"><b>7 min</b><span>para fazer</span></div>
+        </div>
+      </div>
+
+      <button class="btn-primary">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        Copiar todo o texto
+      </button>
+
+      <div class="exports">
+        <span class="section-label">Salvar como</span>
+        <button class="export"><span class="ext">TXT</span><span class="export-text"><b>Texto simples</b><span>Para ler, colar ou editar</span></span><svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button>
+        <button class="export"><span class="ext">SRT</span><span class="export-text"><b>Legendas</b><span>YouTube, Premiere, DaVinci</span></span><svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button>
+        <button class="export"><span class="ext">VTT</span><span class="export-text"><b>Legendas para web</b><span>Players HTML5 e Vimeo</span></span><svg class="icon" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button>
+      </div>
+    </aside>
+  </main>
+
+</div></div>
+</section>
+
+</div>
+
+<script>
+// Tela 1: seleção única de modelo
+document.querySelectorAll('#models .model').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('#models .model').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+    btn.setAttribute('aria-pressed', 'true');
+  });
+});
+
+// Tela 1: estado arrastando no dropzone
+var dz = document.getElementById('dropzone');
+['dragenter', 'dragover'].forEach(function (e) { dz.addEventListener(e, function (ev) { ev.preventDefault(); dz.classList.add('is-dragging'); }); });
+['dragleave', 'drop'].forEach(function (e) { dz.addEventListener(e, function (ev) { ev.preventDefault(); dz.classList.remove('is-dragging'); }); });
+
+// Tela 2: abas de sistema operacional
+var OS = {
+  mac:   { cmds: ['brew install ffmpeg whisper-cpp'], note: 'Usa o Homebrew. Não tem? Instale em brew.sh e rode o comando acima.' },
+  win:   { cmds: ['winget install Gyan.FFmpeg', 'winget install [PACOTE-DO-WHISPER-CLI]'], note: 'Rode no PowerShell. Depois feche e abra o app de novo.' },
+  linux: { cmds: ['sudo apt install ffmpeg', '[COMANDO-DE-INSTALAÇÃO-DO-WHISPER-CLI]'], note: 'Exemplo para Ubuntu e Debian. Em outras distros, use o gerenciador de pacotes equivalente.' }
+};
+var COPY_ICON = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+function renderOS(key) {
+  document.querySelectorAll('#os-tabs .tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.os === key)); });
+  var box = document.getElementById('cmds');
+  box.innerHTML = '';
+  OS[key].cmds.forEach(function (c) {
+    var row = document.createElement('div');
+    row.className = 'cmd';
+    row.innerHTML = '<span class="cmd-prompt">$</span><code></code><button class="btn-copy" aria-label="Copiar comando">' + COPY_ICON + '<span>Copiar</span></button>';
+    row.querySelector('code').textContent = c;
+    var label = row.querySelector('.btn-copy span');
+    row.querySelector('.btn-copy').addEventListener('click', function () {
+      if (navigator.clipboard) navigator.clipboard.writeText(c).catch(function () {});
+      label.textContent = 'Copiado';
+      setTimeout(function () { label.textContent = 'Copiar'; }, 2000);
+    });
+    box.appendChild(row);
+  });
+  document.getElementById('os-note').textContent = OS[key].note;
+}
+document.querySelectorAll('#os-tabs .tab').forEach(function (t) { t.addEventListener('click', function () { renderOS(t.dataset.os); }); });
+renderOS('mac');
+</script>
+</body>
+</html>

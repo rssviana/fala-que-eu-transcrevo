@@ -9,29 +9,38 @@ executável `transcritor` no Windows e no Linux.
 
 ## Como funciona
 
-1. Você arrasta (ou escolhe) um arquivo de vídeo local — mp4, mov, mkv, webm, avi…
-2. Escolhe o idioma (padrão: português do Brasil, ou "Detectar automaticamente") e o modelo.
-3. O **ffmpeg** extrai o áudio em WAV 16 kHz mono para uma pasta temporária.
-4. O **whisper-cli** transcreve. O progresso vem do parse da saída dos dois processos.
-5. O texto aparece na tela; dá para copiar e exportar:
-   - **.txt** — texto corrido, um trecho por linha
-   - **.srt** — legenda com tempos
-   - **.md** — Markdown com título, idioma, modelo, data e parágrafos com tempo de início
-   - **.pdf** — mesmo conteúdo do Markdown, em A4, com a fonte Noto Sans embutida
+A interface segue o handoff de design em `design/HANDOFF.md` (referência visual em
+`design/referencia.html`). São 4 telas:
+
+1. **Início** — arraste (ou escolha, `Cmd/Ctrl+O`) um vídeo local, escolha o idioma (padrão
+   português do Brasil, ou "Detectar automaticamente") e a qualidade (modelo Tiny a Large).
+2. **Primeira execução** — aparece se faltar ffmpeg ou whisper-cli, com o comando de instalação
+   do seu sistema e o botão "Já instalei, verificar de novo".
+3. **Transcrevendo** — etapas (áudio separado → modelo pronto/baixando → transcrevendo → pronto),
+   porcentagem, tempo restante estimado e prévia ao vivo do texto. Ao terminar, o sistema mostra
+   uma notificação.
+4. **Resultado** — clique num trecho para editar, clique no horário para copiá-lo, busque no
+   texto (`Cmd/Ctrl+F`), copie tudo ou salve como:
+   - **TXT** — texto corrido, um trecho por linha
+   - **SRT** e **VTT** — legendas com tempos
+   - **MD** — Markdown com título, idioma, modelo, data e parágrafos com tempo de início
+   - **PDF** — mesmo conteúdo do Markdown, em A4, com a fonte Noto Sans embutida
      (cobre latim, grego e cirílico; japonês e outros alfabetos não aparecem no PDF)
+
+Por baixo: o **ffmpeg** extrai o áudio em WAV 16 kHz mono numa pasta temporária e o
+**whisper-cli** transcreve; o progresso vem do parse da saída dos dois processos.
 
 Os modelos ggml **não vão no instalador**: são baixados do Hugging Face no primeiro uso
 para a pasta de suporte do app (no macOS,
 `~/Library/Application Support/dev.rssviana.transcritor/models`).
 
-| Modelo | Tamanho | Observação |
-|---|---|---|
-| Tiny | ~75 MB | Muito rápido, precisão baixa |
-| Base | ~142 MB | Rápido, bom para testes |
-| Small (padrão) | ~466 MB | Equilíbrio |
-| Medium | ~1,5 GB | Mais preciso, mais lento |
-| Large v3 Turbo (q5) | ~547 MB | Ótima precisão, compacto |
-| Large v3 Turbo | ~1,6 GB | Melhor precisão |
+| Modelo | Arquivo | Tamanho | Rapidez | Precisão |
+|---|---|---|---|---|
+| Tiny | `ggml-tiny.bin` | ~75 MB | 5 | 1 |
+| Base | `ggml-base.bin` | ~142 MB | 4 | 2 |
+| Small (padrão, "Ideal") | `ggml-small.bin` | ~466 MB | 3 | 3 |
+| Medium | `ggml-medium.bin` | ~1,5 GB | 2 | 4 |
+| Large | `ggml-large-v3.bin` | ~2,9 GB | 1 | 5 |
 
 ## Desenvolvimento
 
@@ -44,6 +53,17 @@ flutter test
 flutter run -d macos
 ```
 
+Prints das 4 telas em 1120 × 780 (ou outro tamanho), com as fontes reais, em `build/screens/`,
+para comparar com `design/referencia.html`:
+
+```bash
+SCREENSHOTS=1 flutter test test/screens
+SCREENSHOTS=1 SIZE=720x600 flutter test test/screens
+```
+
+Tamanho e título da janela ficam no código nativo (sem plugin): `macos/Runner/MainFlutterWindow.swift`,
+`windows/runner/main.cpp` + `win32_window.cpp` (mínimo) e `linux/runner/my_application.cc`.
+
 No macOS o projeto usa **Swift Package Manager** para os plugins (veja `flutter: config:` no
 `pubspec.yaml`), então não precisa de CocoaPods. O App Sandbox está **desligado** nos
 entitlements: o app precisa executar ffmpeg/whisper-cli e ler vídeos de qualquer pasta, o que
@@ -53,20 +73,33 @@ não combina com o sandbox. Isso impede publicar na Mac App Store, mas não a di
 
 ```
 lib/
-  main.dart
-  src/core/            # Dart puro, testado em test/
-    catalog.dart         # modelos, idiomas, extensões aceitas
-    binary_locator.dart  # onde procurar ffmpeg e whisper-cli
-    commands.dart        # argumentos do ffmpeg e do whisper-cli
-    progress.dart        # parse de progresso e segmentos
-    export.dart          # .txt, .srt, .md e agrupamento em parágrafos
-    pdf_export.dart      # .pdf (pacote pdf, fontes em assets/fonts)
-    transcriber.dart     # pipeline com Process.start + cancelamento
-    model_store.dart     # download dos modelos (HttpClient, .part → rename)
-  src/ui/              # Flutter
-    controller.dart      # estado da tela (ChangeNotifier)
-    home_page.dart
+  main.dart              # tema, troca de telas (AppShell)
+  src/core/              # Dart puro, testado em test/
+    catalog.dart           # modelos, idiomas, formatos
+    binary_locator.dart    # onde procurar ffmpeg e whisper-cli
+    commands.dart          # argumentos do ffmpeg e do whisper-cli
+    progress.dart          # parse de progresso e segmentos
+    progress_plan.dart     # peso das etapas e tempo restante
+    export.dart            # .txt, .srt, .vtt, .md, parágrafos, rótulos de tempo
+    pdf_export.dart        # .pdf (pacote pdf, Noto Sans em assets/fonts)
+    search.dart            # busca sem acento/maiúsculas
+    system.dart            # comandos de instalação por SO e notificação
+    transcriber.dart       # etapas com Process.start + cancelamento + miniatura
+    model_store.dart       # download dos modelos (HttpClient, .part → rename)
+  theme/
+    app_colors.dart        # todos os tokens do handoff + AccentPalette (accent trocável)
+    app_text.dart          # estilos de texto (Bricolage, Inter, JetBrains Mono)
+  ui/
+    controller.dart        # estado das 4 telas (ChangeNotifier)
+    screens/               # home, setup, progress, result
+    widgets/               # ícones SVG, botões, header, cartão do arquivo
 ```
+
+Fontes da interface embutidas em `assets/fonts` (licenças OFL ao lado). São fontes variáveis; o
+peso e o eixo óptico vão em `FontVariation`. A altura de linha "normal" de cada fonte é fixada em
+`app_text.dart` para bater com o navegador (o Flutter usaria as métricas "win", ~18% mais altas).
+O ícone do app (`assets/icon/app_icon_1024.png`) é o logo do header; está instalado no macOS e no
+Windows (`windows/runner/resources/app_icon.ico`).
 
 ## Onde o app procura os binários
 
@@ -77,8 +110,20 @@ Em ordem, parando no primeiro encontrado (`lib/src/core/binary_locator.dart`):
    - Windows e Linux: `bin/` ao lado do executável
 2. `PATH` do sistema
 3. Pastas comuns: `/opt/homebrew/bin`, `/usr/local/bin` (macOS); `/usr/local/bin`, `/usr/bin`,
-   `/snap/bin` (Linux). Apps abertos pelo Finder não herdam o `PATH` do shell, por isso o
-   fallback.
+   `/snap/bin` (Linux); `%LOCALAPPDATA%\FalaQueEuTranscrevo\bin` (e `bin\Release`) no Windows.
+   Apps abertos pelo Finder não herdam o `PATH` do shell, por isso o fallback.
+
+### Comandos de instalação da tela "Primeira execução"
+
+| SO | ffmpeg | whisper-cli |
+|---|---|---|
+| macOS | `brew install ffmpeg` | `brew install whisper-cpp` (os dois juntos viram um comando só) |
+| Windows | `winget install Gyan.FFmpeg` | não há pacote no winget: um comando de PowerShell baixa o `whisper-bin-x64.zip` oficial para `%LOCALAPPDATA%\FalaQueEuTranscrevo\bin` |
+| Linux | `sudo apt install ffmpeg` | `sudo snap install whisper-cpp && sudo snap alias whisper-cpp.cli whisper-cli` (snap **não oficial**) |
+
+Ainda não testados em Windows e Linux de verdade. O snap tem confinamento estrito e pode não
+enxergar o WAV temporário em `/tmp`; nos builds distribuídos o whisper-cli vai empacotado e essa
+tela não aparece.
 
 Nomes aceitos: `ffmpeg` e `whisper-cli` (ou o nome antigo `whisper-cpp`), com `.exe` no Windows.
 
@@ -141,6 +186,10 @@ plataforma. Roda em push de tag `v*` ou manualmente (workflow_dispatch).
 - Sem assinatura/notarização no macOS: na primeira abertura, use botão direito → Abrir.
 - Sem instaladores (dmg/msi/AppImage) ainda: os artefatos são a pasta do app compactada.
 - Arquivos sem trilha de áudio falham na etapa do ffmpeg (a mensagem de erro mostra o motivo).
+- Telas de Histórico e Configurações ainda não foram desenhadas: os botões abrem um aviso "Em breve".
+- A notificação de fim usa `osascript` (macOS), `notify-send` (Linux) e um balão do PowerShell
+  (Windows). No macOS ela aparece como vinda do "Script Editor".
+- Linux ainda sem ícone de janela.
 
 > O workflow ainda não rodou: o projeto não tem repositório remoto. Ao subir para o GitHub,
 > confira o primeiro run, principalmente o download do ffmpeg do macOS (fonte de terceiros).

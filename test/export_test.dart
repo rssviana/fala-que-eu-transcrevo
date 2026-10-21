@@ -49,6 +49,40 @@ Tchau!
 ''');
   });
 
+  test('VTT com cabeçalho e ponto nos milissegundos', () {
+    expect(
+      toVtt(segs),
+      startsWith('WEBVTT\n\n00:00:00.000 --> 00:00:02.005\nOlá.\n\n'),
+    );
+    expect(toVtt(segs), isNot(contains('00:00:03.000 --> 00:00:03.000')));
+  });
+
+  test('contagem de palavras ignora anotações', () {
+    expect(wordCount(segs), 2);
+    expect(
+      wordCount(const [
+        Segment(
+          start: Duration.zero,
+          end: Duration.zero,
+          text: "É d'água, 2 vezes.",
+        ),
+      ]),
+      4,
+    );
+  });
+
+  test('rótulos de tempo', () {
+    expect(timestampLabel(const Duration(seconds: 7)), '00:07');
+    expect(timestampLabel(const Duration(minutes: 48, seconds: 12)), '48:12');
+    expect(
+      timestampLabel(const Duration(hours: 1, minutes: 2, seconds: 3)),
+      '1:02:03',
+    );
+    expect(elapsedLabel(const Duration(seconds: 25)), '25 s');
+    expect(elapsedLabel(const Duration(minutes: 7, seconds: 10)), '7 min');
+    expect(elapsedLabel(const Duration(hours: 1, minutes: 5)), '1 h 05 min');
+  });
+
   test('texto puro remove anotações e vazios', () {
     expect(toPlainText(segs), 'Olá.\nTchau!');
   });
