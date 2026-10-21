@@ -37,13 +37,12 @@ Os instaladores ainda **não são assinados**, então o sistema avisa na primeir
 - **Linux** (x86_64): dê permissão de execução e abra:
   `chmod +x FalaQueEuTranscrevo-linux-x86_64.AppImage && ./FalaQueEuTranscrevo-linux-x86_64.AppImage`
 
-Nomes técnicos: pasta e pacote Dart `transcritor`, bundle id `dev.rssviana.transcritor`,
+Nomes técnicos: pasta e pacote Dart `transcritor`, identificador `dev.fqet.falaqueeutranscrevo`,
 executável `transcritor` no Windows e no Linux.
 
 ## Como funciona
 
-A interface segue o handoff de design em `design/HANDOFF.md` (referência visual em
-`design/referencia.html`). São 4 telas:
+São 4 telas:
 
 1. **Início** — arraste (ou escolha, `Cmd/Ctrl+O`) um vídeo local, escolha o idioma (padrão
    português do Brasil, ou "Detectar automaticamente") e a qualidade (modelo Tiny a Large
@@ -67,8 +66,11 @@ Por baixo: o **ffmpeg** extrai o áudio em WAV 16 kHz mono numa pasta temporári
 **whisper-cli** transcreve; o progresso vem do parse da saída dos dois processos.
 
 Os modelos ggml **não vão no instalador**: são baixados do Hugging Face no primeiro uso
-para a pasta de suporte do app (no macOS,
-`~/Library/Application Support/dev.rssviana.transcritor/models`).
+para a pasta `models` dentro da pasta de dados do app:
+
+- macOS: `~/Library/Application Support/dev.fqet.falaqueeutranscrevo/models`
+- Windows: `%APPDATA%\dev.fqet\Fala que eu transcrevo!\models`
+- Linux: `~/.local/share/dev.fqet.falaqueeutranscrevo/models`
 
 | Modelo | Arquivo | Tamanho | Rapidez | Precisão |
 |---|---|---|---|---|

@@ -8,7 +8,7 @@
 PRODUCT_NAME = Fala que eu transcrevo!
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = dev.rssviana.transcritor
+PRODUCT_BUNDLE_IDENTIFIER = dev.fqet.falaqueeutranscrevo
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 dev.rssviana. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 Fala que eu transcrevo!

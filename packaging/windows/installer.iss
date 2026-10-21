@@ -11,7 +11,7 @@
 AppId={{6E2C1A84-3F5B-4C1E-9B7D-FA1A0E7C2D91}
 AppName=Fala que eu transcrevo!
 AppVersion={#AppVersion}
-AppPublisher=rssviana
+AppPublisher=Fala que eu transcrevo!
 AppPublisherURL=https://github.com/rssviana/fala-que-eu-transcrevo
 DefaultDirName={autopf}\Fala que eu transcrevo
 DefaultGroupName=Fala que eu transcrevo!
