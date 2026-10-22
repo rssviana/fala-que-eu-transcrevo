@@ -9,6 +9,7 @@ import 'ui/screens/progress_screen.dart';
 import 'ui/screens/result_screen.dart';
 import 'ui/screens/setup_screen.dart';
 import 'ui/widgets/common.dart';
+import 'ui/widgets/disclaimer_toast.dart';
 
 const appTitle = 'Fala que eu transcrevo!';
 
@@ -114,7 +115,7 @@ class AppShell extends StatelessWidget {
               ResultScreen(controller: controller),
             ),
           };
-          return Column(
+          final page = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppHeader(trailing: trailing),
@@ -132,6 +133,24 @@ class AppShell extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          );
+          // Aviso de uso: aparece ao abrir e só fecha no X.
+          return Stack(
+            children: [
+              Positioned.fill(child: page),
+              if (!controller.disclaimerDismissed)
+                Positioned(
+                  right: 24,
+                  bottom: 24,
+                  left: 24,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: DisclaimerToast(
+                      onClose: controller.dismissDisclaimer,
+                    ),
+                  ),
+                ),
             ],
           );
         },

@@ -49,7 +49,9 @@ void main() {
     for (final m in ['tiny', 'base']) {
       File('${support.path}/models/ggml-$m.bin').writeAsStringSync('x');
     }
-    final c = AppController(os: 'macos', environment: const {'PATH': ''});
+    final c = AppController(os: 'macos', environment: const {'PATH': ''})
+      // Os prints comparam com a referência, que não tem o aviso.
+      ..disclaimerDismissed = Platform.environment['DISCLAIMER'] != '1';
     await tester.runAsync(
       () => c.init(supportDir: support, tempDir: Directory.systemTemp),
     );

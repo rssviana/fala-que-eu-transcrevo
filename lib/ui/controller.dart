@@ -50,6 +50,14 @@ class AppController extends ChangeNotifier {
   bool ready = false;
   AppScreen screen = AppScreen.home;
 
+  /// Aviso de uso (fins de aprendizagem e testes): mostrado a cada abertura.
+  bool disclaimerDismissed = false;
+
+  void dismissDisclaimer() {
+    disclaimerDismissed = true;
+    notifyListeners();
+  }
+
   // ---------- dependências ----------
   String? ffmpegPath;
   String? whisperPath;

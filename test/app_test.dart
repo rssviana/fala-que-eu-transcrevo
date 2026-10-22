@@ -148,4 +148,25 @@ void main() {
       isTrue,
     );
   });
+
+  testWidgets('aviso aparece ao abrir e só fecha no X', (tester) async {
+    files.addAll({'/x/ffmpeg', '/x/whisper-cli'});
+    final c = await start(tester);
+    expect(find.text('Feito para aprender e testar'), findsOneWidget);
+    expect(
+      find.textContaining('sem fins comerciais'),
+      findsOneWidget,
+    );
+
+    // Trocar de tela não fecha o aviso.
+    c.screen = AppScreen.setup;
+    c.setLanguage('pt-BR');
+    await tester.pump();
+    expect(find.text('Feito para aprender e testar'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Fechar aviso'));
+    await tester.pump();
+    expect(find.text('Feito para aprender e testar'), findsNothing);
+    expect(c.disclaimerDismissed, isTrue);
+  });
 }

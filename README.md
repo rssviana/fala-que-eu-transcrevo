@@ -22,6 +22,10 @@
   <a href="https://github.com/rssviana/fala-que-eu-transcrevo/actions/workflows/build.yml"><img alt="Build" src="https://github.com/rssviana/fala-que-eu-transcrevo/actions/workflows/build.yml/badge.svg"></a>
 </p>
 
+> [!WARNING]
+> **Aviso importante:** esta aplicação é apenas para fins de aprendizagem e testes e não tem fins
+> comerciais. Podem ocorrer erros na execução. Baixe e use por sua conta e risco.
+
 ## Instalação
 
 O ffmpeg e o whisper-cli já vão dentro do instalador. Os modelos do Whisper são baixados pelo
